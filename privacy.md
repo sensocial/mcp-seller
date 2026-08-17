@@ -101,7 +101,10 @@ your own account at any time — see [Support](support.md).
 Revoking a token on the settings page takes effect immediately, and signing out of the
 connector in your AI client ends the session.
 
-> **To be completed before publication:** the retention period for audit log entries.
+**How long the audit log is kept.** Entries are held on SenPrints' own logging infrastructure
+under the same retention rules as the rest of the platform's operational logs, and are used
+only for security review and support. For the current retention period, or to ask for your
+account's entries to be removed, write to privacy@senprints.com.
 
 We do not store your AI conversations. SenPrints only ever sees the individual tool calls your
 assistant makes, never the surrounding chat.
