@@ -1,0 +1,46 @@
+title: SenPrints Seller Connector
+description: >-
+  Public documentation for the SenPrints Seller MCP connector — connect your
+  SenPrints seller account to an AI assistant such as Claude, ChatGPT or Cursor.
+url: "https://mcp.senprints.com"
+baseurl: ""
+
+# just-the-docs is not one of GitHub Pages' bundled "supported themes", but it
+# is fetched at build time via the `remote_theme` mechanism, which GitHub
+# Pages' own build process supports out of the box — no custom Actions
+# workflow or Gemfile needed. `jekyll-remote-theme` is the gem that resolves
+# `remote_theme`; unlike jekyll-relative-links it is NOT one of the plugins
+# GitHub Pages enables automatically, so it must be listed explicitly here.
+remote_theme: just-the-docs/just-the-docs
+plugins:
+  - jekyll-remote-theme
+
+# jekyll-relative-links is NOT listed here on purpose: GitHub's own docs
+# ("About GitHub Pages and Jekyll") state it is one of a small set of plugins
+# GitHub Pages "enables by default and cannot be disabled", so every page in
+# this site can keep linking to other pages by their source filename
+# (e.g. `[Privacy](privacy.md)`) and the build rewrites it to the page's real
+# rendered URL automatically. Adding it to `plugins:` again would be harmless
+# but redundant.
+
+color_scheme: light
+search_enabled: true
+
+# Jekyll excludes dotfiles and dot-directories from the build by default, so
+# `.well-known/` would silently never reach `_site/`. The MCP Registry proves
+# domain ownership by fetching https://mcp.senprints.com/.well-known/mcp-registry-auth,
+# and a 404 there fails publishing with "no MCP public key found in HTTP response".
+# See registry-publish.md for the file's contents and the publish runbook.
+include:
+  - ".well-known"
+
+# Nav ordering by each page's `nav_order` front matter (1 = Home ... 7 =
+# Support) is just-the-docs' default behavior — no config key needed here.
+
+# All 7 pages use the theme's default layout; set here once instead of
+# repeating `layout: default` in every page's front matter.
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
