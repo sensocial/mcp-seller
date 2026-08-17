@@ -27,6 +27,9 @@ Plus:
   this file, and Jekyll drops directories whose name starts with a dot. That
   would silently remove `.well-known/` from the published site.
 - `.well-known/mcp-registry-auth` — domain-ownership proof for the MCP Registry.
+- `favicon.ico` — the SenPrints brand mark, 32×32, taken from the seller
+  dashboard (`seller_v3/public/favicon.ico`) so the two match. Browsers request
+  `/favicon.ico` whether or not a page links to it, so it stays at the root.
 - `CNAME` — custom domain.
 
 The prose is maintained as Markdown in the internal backend repo
@@ -88,3 +91,6 @@ in HTTP response" error.
 - Each page carries its own copy of the stylesheet on purpose. A shared
   `style.css` would be one more URL to exempt from bot protection, and a
   blocked stylesheet would render the page as unstyled text for a reviewer.
+- The favicon is embedded in every page as a `data:` URI, for the same reason,
+  with `favicon.ico` at the root as the fallback. Replacing the icon therefore
+  means regenerating the base64 in all seven pages, not just swapping the file.
