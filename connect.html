@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connect in 3 steps — SenPrints Seller Connector</title>
+<meta name="description" content="Connect the SenPrints Seller MCP connector to Claude, ChatGPT or Cursor, either through SenPrints sign-in or with a manually generated access token.">
+<link rel="canonical" href="https://mcp.senprints.com/connect.html">
+<style>
+:root{--bg:#fff;--fg:#1a1c1e;--muted:#5b6167;--line:#e3e6e9;--accent:#0b5fb0;--code-bg:#f4f6f8;--note-bg:#f6f9fc}
+@media (prefers-color-scheme:dark){:root{--bg:#15171a;--fg:#e6e8ea;--muted:#a3aab1;--line:#2b2f34;--accent:#71b7ff;--code-bg:#1d2024;--note-bg:#1a1d21}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:46rem;margin:0 auto;padding:0 1.25rem}
+a{color:var(--accent)}
+header.site{border-bottom:1px solid var(--line);padding:1.1rem 0 .9rem}
+.brand{display:block;font-weight:600;font-size:1rem;color:var(--fg);text-decoration:none;margin-bottom:.55rem}
+nav{display:flex;flex-wrap:wrap;gap:.35rem 1rem;font-size:.875rem}
+nav a{color:var(--muted);text-decoration:none}
+nav a:hover{color:var(--accent);text-decoration:underline}
+nav a[aria-current=page]{color:var(--fg);font-weight:600}
+main{padding:2rem 0 1rem}
+h1{font-size:1.9rem;line-height:1.25;margin:0 0 1rem}
+h2{font-size:1.3rem;margin:2.2rem 0 .7rem;padding-top:.2rem}
+h3{font-size:1.05rem;margin:1.6rem 0 .5rem}
+p,ul,ol{margin:0 0 1rem}
+ul,ol{padding-left:1.35rem}
+li{margin:.3rem 0}
+hr{border:0;border-top:1px solid var(--line);margin:2.2rem 0}
+blockquote{margin:1.2rem 0;padding:.85rem 1.1rem;background:var(--note-bg);border-left:3px solid var(--line);border-radius:4px;color:var(--fg)}
+blockquote p:last-child{margin:0}
+code{background:var(--code-bg);padding:.12em .35em;border-radius:3px;font-size:.9em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:var(--code-bg);padding:.85rem 1rem;border-radius:5px;overflow-x:auto;margin:0 0 1rem}
+pre code{background:none;padding:0;font-size:.875rem}
+.tablewrap{overflow-x:auto;margin:0 0 1.3rem}
+table{border-collapse:collapse;width:100%;font-size:.925rem}
+th,td{text-align:left;vertical-align:top;padding:.5rem .7rem;border-bottom:1px solid var(--line)}
+th{font-weight:600;white-space:nowrap}
+footer{border-top:1px solid var(--line);margin-top:3rem;padding:1.4rem 0 2.4rem;font-size:.85rem;color:var(--muted)}
+footer p{margin:0 0 .4rem}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap">
+<a class="brand" href="index.html">SenPrints Seller Connector</a>
+<nav aria-label="Documentation">
+<a href="index.html">Home</a>
+<a href="connect.html" aria-current="page">Connect</a>
+<a href="what-you-can-ask.html">What you can ask</a>
+<a href="tool-reference.html">Tool reference</a>
+<a href="data-and-security.html">Data &amp; security</a>
+<a href="privacy.html">Privacy</a>
+<a href="support.html">Support</a>
+</nav>
+</div></header>
+
+<main><div class="wrap">
+<h1>Connect in 3 steps</h1>
+
+<p>You can connect through SenPrints sign-in or with a manually generated access token. Use the
+sign-in method when your AI client supports it.</p>
+
+<hr>
+
+<h2>Method 1 — Sign in with SenPrints (recommended)</h2>
+
+<p>Your AI client opens SenPrints for sign-in and connection approval. The client then stores and
+refreshes its token. You do not need to copy credentials, and you can revoke the connection
+from your seller dashboard.</p>
+
+<h3>1. Add the server in your AI client</h3>
+
+<p>Use this URL:</p>
+
+<pre><code>https://api.senprints.com/mcp/seller</code></pre>
+
+<p>Where to put it:</p>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Client</th><th>Where</th></tr></thead>
+<tbody>
+<tr><td>Claude</td><td>Settings → Connectors → Add custom connector</td></tr>
+<tr><td>ChatGPT</td><td>Settings → Connectors → Add</td></tr>
+<tr><td>Cursor</td><td>Settings → MCP → Add new MCP server</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>The client registers automatically. You do not need to create a client ID or client secret.</p>
+
+<blockquote>
+<p><strong>If your dashboard is on the seller-center domain</strong>, use
+<code>https://api.senprints.com/mcp/seller-custom</code> instead. It provides the same connector and
+tools but directs you to the corresponding login page. If you are unsure, try the first URL.
+If it directs you to a domain where you do not have an account, use the other URL.</p>
+</blockquote>
+
+<h3>2. Approve the connection</h3>
+
+<p>The client opens a SenPrints login page. Sign in and approve the consent screen. The screen
+identifies the account being connected; check it if you have more than one account.</p>
+
+<h3>3. Ask something</h3>
+
+<p>First ask <strong>“which SenPrints account am I connected to?”</strong> The assistant returns the account
+name and email. Confirm that they match the account you intended to connect.</p>
+
+<hr>
+
+<h2>Method 2 — Access token</h2>
+
+<p>Use a manual access token only when your client does not support the sign-in flow.</p>
+
+<ol>
+<li>Open <strong>Settings → MCP</strong> in your seller dashboard.</li>
+<li>Click <strong>Generate token</strong>. Copy it — it is shown once and never again.</li>
+<li>Paste it into your client as a bearer token for <code>https://api.senprints.com/mcp/seller</code>.</li>
+</ol>
+
+<p>Notes on tokens:</p>
+
+<ul>
+<li>A token is valid for <strong>90 days</strong>. Generate a new token after it expires.</li>
+<li>You can hold <strong>5 tokens at a time</strong>. Generating a sixth automatically revokes the oldest, so
+a device you no longer use cannot retain a working token indefinitely.</li>
+<li>Revoke any token at any time from the same screen. Revoking takes effect immediately.</li>
+<li>Treat a token as a password. Anyone holding it can read your account. Do not paste it into a
+shared document, a screenshot, or a support ticket.</li>
+</ul>
+
+<hr>
+
+<h2>Disconnecting</h2>
+
+<p>For either method, <strong>Settings → MCP</strong> in your dashboard lists every active connection and
+token. Revoke an entry there to remove its access immediately. You do not need to change your
+SenPrints password.</p>
+
+<hr>
+
+<h2 id="if-it-does-not-connect">If it does not connect</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>What you see</th><th>What it usually means</th></tr></thead>
+<tbody>
+<tr><td>Login page loads, approval fails</td><td>You are signed into a different SenPrints account in that browser. Sign out and retry.</td></tr>
+<tr><td>Connects, but the assistant says it cannot see anything</td><td>You are a <strong>team member</strong> on someone else’s account. See below.</td></tr>
+<tr><td>“Too many requests”</td><td>You have gone over the per-minute limit. Wait a minute and continue.</td></tr>
+<tr><td>Token rejected immediately</td><td>The token expired (90 days) or was revoked. Generate a new one.</td></tr>
+</tbody>
+</table>
+</div>
+
+<p><strong>Team members:</strong> the connector links the account you use to sign in, not an account to which
+you have been granted team access. If you manage another seller’s store as a team member, the
+connector shows your own account, which is usually empty. The account owner must connect their
+account.</p>
+</div></main>
+
+<footer><div class="wrap">
+<p>SenPrints Seller Connector · <code>https://api.senprints.com/mcp/seller</code></p>
+<p>Privacy and data questions: <a href="mailto:privacy@senprints.com">privacy@senprints.com</a> ·
+<a href="https://senprints.com/page/privacy">SenPrints Privacy Policy</a></p>
+</div></footer>
+</body>
+</html>

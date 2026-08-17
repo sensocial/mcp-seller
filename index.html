@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SenPrints Seller Connector</title>
+<meta name="description" content="Public documentation for the SenPrints Seller MCP connector — connect your SenPrints seller account to an AI assistant such as Claude, ChatGPT or Cursor.">
+<link rel="canonical" href="https://mcp.senprints.com/index.html">
+<style>
+:root{--bg:#fff;--fg:#1a1c1e;--muted:#5b6167;--line:#e3e6e9;--accent:#0b5fb0;--code-bg:#f4f6f8;--note-bg:#f6f9fc}
+@media (prefers-color-scheme:dark){:root{--bg:#15171a;--fg:#e6e8ea;--muted:#a3aab1;--line:#2b2f34;--accent:#71b7ff;--code-bg:#1d2024;--note-bg:#1a1d21}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:46rem;margin:0 auto;padding:0 1.25rem}
+a{color:var(--accent)}
+header.site{border-bottom:1px solid var(--line);padding:1.1rem 0 .9rem}
+.brand{display:block;font-weight:600;font-size:1rem;color:var(--fg);text-decoration:none;margin-bottom:.55rem}
+nav{display:flex;flex-wrap:wrap;gap:.35rem 1rem;font-size:.875rem}
+nav a{color:var(--muted);text-decoration:none}
+nav a:hover{color:var(--accent);text-decoration:underline}
+nav a[aria-current=page]{color:var(--fg);font-weight:600}
+main{padding:2rem 0 1rem}
+h1{font-size:1.9rem;line-height:1.25;margin:0 0 1rem}
+h2{font-size:1.3rem;margin:2.2rem 0 .7rem;padding-top:.2rem}
+h3{font-size:1.05rem;margin:1.6rem 0 .5rem}
+p,ul,ol{margin:0 0 1rem}
+ul,ol{padding-left:1.35rem}
+li{margin:.3rem 0}
+hr{border:0;border-top:1px solid var(--line);margin:2.2rem 0}
+blockquote{margin:1.2rem 0;padding:.85rem 1.1rem;background:var(--note-bg);border-left:3px solid var(--line);border-radius:4px;color:var(--fg)}
+blockquote p:last-child{margin:0}
+code{background:var(--code-bg);padding:.12em .35em;border-radius:3px;font-size:.9em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:var(--code-bg);padding:.85rem 1rem;border-radius:5px;overflow-x:auto;margin:0 0 1rem}
+pre code{background:none;padding:0;font-size:.875rem}
+.tablewrap{overflow-x:auto;margin:0 0 1.3rem}
+table{border-collapse:collapse;width:100%;font-size:.925rem}
+th,td{text-align:left;vertical-align:top;padding:.5rem .7rem;border-bottom:1px solid var(--line)}
+th{font-weight:600;white-space:nowrap}
+footer{border-top:1px solid var(--line);margin-top:3rem;padding:1.4rem 0 2.4rem;font-size:.85rem;color:var(--muted)}
+footer p{margin:0 0 .4rem}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap">
+<a class="brand" href="index.html">SenPrints Seller Connector</a>
+<nav aria-label="Documentation">
+<a href="index.html" aria-current="page">Home</a>
+<a href="connect.html">Connect</a>
+<a href="what-you-can-ask.html">What you can ask</a>
+<a href="tool-reference.html">Tool reference</a>
+<a href="data-and-security.html">Data &amp; security</a>
+<a href="privacy.html">Privacy</a>
+<a href="support.html">Support</a>
+</nav>
+</div></header>
+
+<main><div class="wrap">
+<h1>SenPrints Seller Connector</h1>
+
+<p>Use your AI assistant to ask questions about your SenPrints store in plain English. The
+connector answers with data from your SenPrints seller account.</p>
+
+<blockquote>
+<p>“How did last week compare to the week before?”<br>
+“Which country is growing fastest for me?”<br>
+“Find the order for maria@example.com and tell me where it is.”</p>
+</blockquote>
+
+<p>The connector links your SenPrints seller account to Claude, ChatGPT, Cursor, or another AI
+client that supports the Model Context Protocol (MCP). Once connected, the assistant can read
+your sales, orders, customers, campaigns, payouts and billing. It can also publish blog posts
+to your storefront when instructed.</p>
+
+<p><strong>Of the 28 tools, 26 are read-only. The two write tools return a preview by default and apply
+a change only when confirmation is set. They are marked <code>destructiveHint</code>, so a compliant
+client prompts before applying a change. The server does not require a separate human round
+trip: a client configured for automatic approval can submit confirmation on its first call.</strong>
+See <a href="data-and-security.html">Data &amp; security</a>.</p>
+
+<hr>
+
+<h2>Start here</h2>
+
+<div class="tablewrap">
+<table>
+<tbody>
+<tr><td><a href="connect.html">Connect in 3 steps</a></td><td>Link your account to Claude, ChatGPT or Cursor</td></tr>
+<tr><td><a href="what-you-can-ask.html">What you can ask</a></td><td>Example questions that work well</td></tr>
+<tr><td><a href="tool-reference.html">Tool reference</a></td><td>All 28 tools, what each one reads or writes</td></tr>
+<tr><td><a href="data-and-security.html">Data &amp; security</a></td><td>What the assistant can see, and what it cannot</td></tr>
+<tr><td><a href="privacy.html">Privacy</a></td><td>What leaves SenPrints, where it goes, how long we keep it</td></tr>
+<tr><td><a href="support.html">Support</a></td><td>When something does not work</td></tr>
+</tbody>
+</table>
+</div>
+
+<hr>
+
+<h2>What it is</h2>
+
+<p>The connector is a hosted MCP server operated by SenPrints at
+<code>https://api.senprints.com/mcp/seller</code>. You do not need to install or run software locally.
+Connect it as a remote service and sign in with your SenPrints seller credentials.</p>
+
+<p>Every request is filtered server-side by the seller ID authorised for the connection. The
+connector does not require a client-side account-filtering setting, and one seller’s
+connection cannot access another seller’s data.</p>
+
+<h2>What it is not</h2>
+
+<ul>
+<li><strong>Not an admin tool.</strong> It cannot see other sellers, platform totals, or anything staff-only.</li>
+<li><strong>Not a bulk editor.</strong> Of 28 tools, 26 are read-only. The two write tools publish a blog post
+or switch campaigns between active and inactive. They preview by default and apply only when
+confirmation is set; automatic client approval can provide confirmation on the first call.</li>
+<li><strong>Not a payments tool.</strong> It can tell you what your balance and payouts look like. It cannot
+move money, request a payout, or change a payment method.</li>
+</ul>
+
+<h2>Requirements</h2>
+
+<ul>
+<li>An active SenPrints seller account.</li>
+<li>An AI client that supports remote MCP servers over streamable HTTP with OAuth. Supported
+clients include Claude (web, desktop and mobile), ChatGPT and Cursor.</li>
+</ul>
+</div></main>
+
+<footer><div class="wrap">
+<p>SenPrints Seller Connector · <code>https://api.senprints.com/mcp/seller</code></p>
+<p>Privacy and data questions: <a href="mailto:privacy@senprints.com">privacy@senprints.com</a> ·
+<a href="https://senprints.com/page/privacy">SenPrints Privacy Policy</a></p>
+</div></footer>
+</body>
+</html>

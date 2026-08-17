@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tool reference — SenPrints Seller Connector</title>
+<meta name="description" content="All 28 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
+<link rel="canonical" href="https://mcp.senprints.com/tool-reference.html">
+<style>
+:root{--bg:#fff;--fg:#1a1c1e;--muted:#5b6167;--line:#e3e6e9;--accent:#0b5fb0;--code-bg:#f4f6f8;--note-bg:#f6f9fc}
+@media (prefers-color-scheme:dark){:root{--bg:#15171a;--fg:#e6e8ea;--muted:#a3aab1;--line:#2b2f34;--accent:#71b7ff;--code-bg:#1d2024;--note-bg:#1a1d21}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:46rem;margin:0 auto;padding:0 1.25rem}
+a{color:var(--accent)}
+header.site{border-bottom:1px solid var(--line);padding:1.1rem 0 .9rem}
+.brand{display:block;font-weight:600;font-size:1rem;color:var(--fg);text-decoration:none;margin-bottom:.55rem}
+nav{display:flex;flex-wrap:wrap;gap:.35rem 1rem;font-size:.875rem}
+nav a{color:var(--muted);text-decoration:none}
+nav a:hover{color:var(--accent);text-decoration:underline}
+nav a[aria-current=page]{color:var(--fg);font-weight:600}
+main{padding:2rem 0 1rem}
+h1{font-size:1.9rem;line-height:1.25;margin:0 0 1rem}
+h2{font-size:1.3rem;margin:2.2rem 0 .7rem;padding-top:.2rem}
+h3{font-size:1.05rem;margin:1.6rem 0 .5rem}
+p,ul,ol{margin:0 0 1rem}
+ul,ol{padding-left:1.35rem}
+li{margin:.3rem 0}
+hr{border:0;border-top:1px solid var(--line);margin:2.2rem 0}
+blockquote{margin:1.2rem 0;padding:.85rem 1.1rem;background:var(--note-bg);border-left:3px solid var(--line);border-radius:4px;color:var(--fg)}
+blockquote p:last-child{margin:0}
+code{background:var(--code-bg);padding:.12em .35em;border-radius:3px;font-size:.9em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:var(--code-bg);padding:.85rem 1rem;border-radius:5px;overflow-x:auto;margin:0 0 1rem}
+pre code{background:none;padding:0;font-size:.875rem}
+.tablewrap{overflow-x:auto;margin:0 0 1.3rem}
+table{border-collapse:collapse;width:100%;font-size:.925rem}
+th,td{text-align:left;vertical-align:top;padding:.5rem .7rem;border-bottom:1px solid var(--line)}
+th{font-weight:600;white-space:nowrap}
+footer{border-top:1px solid var(--line);margin-top:3rem;padding:1.4rem 0 2.4rem;font-size:.85rem;color:var(--muted)}
+footer p{margin:0 0 .4rem}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap">
+<a class="brand" href="index.html">SenPrints Seller Connector</a>
+<nav aria-label="Documentation">
+<a href="index.html">Home</a>
+<a href="connect.html">Connect</a>
+<a href="what-you-can-ask.html">What you can ask</a>
+<a href="tool-reference.html" aria-current="page">Tool reference</a>
+<a href="data-and-security.html">Data &amp; security</a>
+<a href="privacy.html">Privacy</a>
+<a href="support.html">Support</a>
+</nav>
+</div></header>
+
+<main><div class="wrap">
+<h1>Tool reference</h1>
+
+<p>The connector provides 28 tools: <strong>26 are read-only and 2 can write. Both write tools return a
+preview by default and apply a change only when confirmation is set.</strong></p>
+
+<p>Read-only tools are marked <code>readOnlyHint</code> in the protocol, so a compliant client can run them
+without prompting. The two write tools are marked <code>destructiveHint</code>, so a compliant client
+prompts before applying a change. The server does not enforce a separate human confirmation
+round trip; a client configured for automatic approval can send confirmation on its first
+call.</p>
+
+<p>Every tool is filtered server-side to the seller account authorised for the connection.
+References to “your” data below mean data filtered by the backend, not by the assistant.</p>
+
+<hr>
+
+<h2>Sales &amp; analytics — 8 tools, all read</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Tool</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td>Sales overview</td><td>Headline KPIs for a window: paid orders, items, sales, profit, AOV, visits, funnel events, refunds, plus live balance</td></tr>
+<tr><td>Sales chart</td><td>Daily time series for sales, visits and each funnel step</td></tr>
+<tr><td>Compare sales periods</td><td>The same KPIs for a window <em>and</em> the one before it — this week vs last week, this month vs last month</td></tr>
+<tr><td>Sales by country</td><td>Sales, orders and profit per buyer country, biggest first</td></tr>
+<tr><td>Sales by device</td><td>Sales, orders and visits per device type</td></tr>
+<tr><td>Sales by store</td><td>Sales, orders, profit and visits per store you own</td></tr>
+<tr><td>Top products</td><td>Best-selling template products with items sold, sales and profit</td></tr>
+<tr><td>Ads breakdown</td><td>Sales, orders and profit attributed to ads, grouped by campaign, source, medium or content</td></tr>
+</tbody>
+</table>
+</div>
+
+<blockquote>
+<p>Your campaigns can be cross-listed on the marketplace and on stores you do not own. Those
+rows are combined in an anonymous <strong>“Other”</strong> bucket. Your figures are included, but the
+other party’s store identity is not returned.</p>
+</blockquote>
+
+<h2>Orders — 3 tools, all read</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Tool</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td>Search orders</td><td>Your orders, filtered by status, payment status, fulfilment status, customer email, order number or date range</td></tr>
+<tr><td>Get order</td><td>One order by id or order number, with its line items</td></tr>
+<tr><td>Search cancel requests</td><td>Cancel requests on your orders</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Customers — 1 tool, read</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Tool</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td>Search customers</td><td>Buyers who purchased from your stores, by exact email or name substring</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>This tool returns the same columns shown in the dashboard <code>/customers</code> list: name, email,
+phone, country, city, state, store, and the number and value of orders placed <strong>with you</strong>.
+Buyer credentials, payment-processor IDs and platform-wide totals are never returned. See
+<a href="data-and-security.html">Data &amp; security</a>.</p>
+
+<h2>Campaigns — 3 tools, 1 writes</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Tool</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td>Search campaigns</td><td>Your campaigns, filtered by status, slug or created date</td></tr>
+<tr><td>Get campaign</td><td>One campaign by id or slug, including its pricing and cost fields</td></tr>
+<tr><td><strong>Set campaign status</strong></td><td><strong>Writes.</strong> Switches campaigns between active and inactive</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Without confirmation, <strong>Set campaign status</strong> returns a preview showing which campaigns would
+change, their current and proposed states, and any campaigns it refuses because they do not
+belong to you or are blocked by the platform. It applies the change only when confirmation is
+set. A compliant client prompts before applying, but automatic approval can submit
+confirmation on the first call. The tool cannot delete a campaign or change campaigns in
+draft, reviewing or blocked states.</p>
+
+<h2>Stores — 2 tools, all read</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Tool</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td>Search stores</td><td>Your stores, by keyword or status</td></tr>
+<tr><td>Get store</td><td>One store by id, domain or sub-domain</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Marketplace connection tokens are never included, and webhook URLs are removed.</p>
+
+<h2>Money — 6 tools, all read</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Tool</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td>Balance summary</td><td>Billing totals grouped by type and status, plus a payout breakdown</td></tr>
+<tr><td>Search transactions</td><td>Sales, commissions, payouts, fees, refunds and topups</td></tr>
+<tr><td>Search payouts</td><td>Your payout queue and history</td></tr>
+<tr><td>Get payout</td><td>One payout by id</td></tr>
+<tr><td>Search refunds</td><td>Payment-gateway refunds on your orders</td></tr>
+<tr><td>Search topups</td><td>Your topup transactions</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Amounts are in USD, the platform settlement currency. Gateway response traces, payout
+signatures and raw topup payloads are removed before a response is returned.</p>
+
+<p>These tools cannot move money. The connector has no tool to request a payout or change a
+payment method.</p>
+
+<h2>Blog &amp; SEO — 4 tools, 1 writes</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Tool</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td>Search blog posts</td><td>Your storefront posts, by store, keyword, category or published state</td></tr>
+<tr><td>Get blog post</td><td>One post including its full HTML body</td></tr>
+<tr><td>Search blog categories</td><td>Your categories, so a post can be filed correctly</td></tr>
+<tr><td><strong>Create or update a blog post</strong></td><td><strong>Writes, and publishes to your public storefront</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Without confirmation, <strong>Create or update a blog post</strong> previews whether it would create or
+update a post, the resolved URL slug, target store, published state and body size. The preview
+reports the body size, not the full body content. The tool saves only when confirmation is set;
+automatic client approval can submit confirmation on the first call. On update, it retains the
+existing slug unless you provide a new one. All HTML is sanitised when saved, so scripts and
+event handlers are removed from submitted content.</p>
+
+<h2>Account — 1 tool, read</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Tool</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td>Who am I</td><td>The seller id, email, name, currency and timezone this session is bound to</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Use this tool first if you have more than one SenPrints account.</p>
+</div></main>
+
+<footer><div class="wrap">
+<p>SenPrints Seller Connector · <code>https://api.senprints.com/mcp/seller</code></p>
+<p>Privacy and data questions: <a href="mailto:privacy@senprints.com">privacy@senprints.com</a> ·
+<a href="https://senprints.com/page/privacy">SenPrints Privacy Policy</a></p>
+</div></footer>
+</body>
+</html>
