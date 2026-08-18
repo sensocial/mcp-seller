@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://mcp.senprints.com/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://mcp.senprints.com/connect</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mcp.senprints.com/what-you-can-ask</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mcp.senprints.com/tool-reference</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mcp.senprints.com/data-and-security</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mcp.senprints.com/privacy</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mcp.senprints.com/support</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+</urlset>

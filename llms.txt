@@ -1,0 +1,22 @@
+# SenPrints Seller Connector
+
+> A remote Model Context Protocol (MCP) server, operated by SenPrints, that lets a seller's AI assistant read their own SenPrints print-on-demand account — sales, orders, customers, campaigns, payouts and billing — and publish storefront blog posts when instructed. 28 tools: 26 read-only, 2 write.
+
+- Endpoint: https://api.senprints.com/mcp/seller (streamable HTTP, OAuth 2.1 with dynamic client registration)
+- Audience: SenPrints sellers using Claude, ChatGPT, Cursor or another MCP client
+- Every request is filtered server-side to the authorised seller; one connection cannot reach another seller's data
+
+
+## Docs
+
+- [Overview](https://mcp.senprints.com/index.md): Overview of the connector, what it reads, and what it will not do.
+- [Connect](https://mcp.senprints.com/connect.md): Link your SenPrints seller account to Claude, ChatGPT or Cursor.
+- [What you can ask](https://mcp.senprints.com/what-you-can-ask.md): Example questions that work well, and ones that will not.
+- [Tool reference](https://mcp.senprints.com/tool-reference.md): All 28 tools, grouped, with what each one reads or writes.
+- [Data & security](https://mcp.senprints.com/data-and-security.md): Account scoping, read-only defaults, rate limits, transport.
+- [Privacy](https://mcp.senprints.com/privacy.md): What leaves SenPrints, who receives it, and how long it is kept.
+- [Support](https://mcp.senprints.com/support.md): Common problems and how to reach a human.
+
+## Optional
+
+- [SenPrints privacy policy](https://senprints.com/page/privacy): platform-wide policy; the connector-specific notice is at https://mcp.senprints.com/privacy.md

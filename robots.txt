@@ -1,0 +1,5 @@
+# The whole site is public documentation — crawling and training are both fine.
+User-agent: *
+Allow: /
+
+Sitemap: https://mcp.senprints.com/sitemap.xml

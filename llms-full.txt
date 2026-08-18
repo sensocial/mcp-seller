@@ -1,0 +1,662 @@
+# SenPrints Seller Connector
+
+> A remote Model Context Protocol (MCP) server, operated by SenPrints, that lets a seller's AI assistant read their own SenPrints print-on-demand account — sales, orders, customers, campaigns, payouts and billing — and publish storefront blog posts when instructed. 28 tools: 26 read-only, 2 write.
+
+- Endpoint: https://api.senprints.com/mcp/seller (streamable HTTP, OAuth 2.1 with dynamic client registration)
+- Audience: SenPrints sellers using Claude, ChatGPT, Cursor or another MCP client
+- Every request is filtered server-side to the authorised seller; one connection cannot reach another seller's data
+
+
+---
+
+# SenPrints Seller Connector
+
+Use your AI assistant to ask questions about your SenPrints store in plain English. The
+connector answers with data from your SenPrints seller account.
+
+> "How did last week compare to the week before?"
+> "Which country is growing fastest for me?"
+> "Find the order for maria@example.com and tell me where it is."
+
+The connector links your SenPrints seller account to Claude, ChatGPT, Cursor, or another AI
+client that supports the Model Context Protocol (MCP). Once connected, the assistant can read
+your sales, orders, customers, campaigns, payouts and billing. It can also publish blog posts
+to your storefront when instructed.
+
+**Of the 28 tools, 26 are read-only. The two write tools return a preview by default and apply
+a change only when confirmation is set. They are marked `destructiveHint`, so a compliant
+client prompts before applying a change. The server does not require a separate human round
+trip: a client configured for automatic approval can submit confirmation on its first call.**
+See [Data & security](/data-and-security).
+
+---
+
+## Start here
+
+| | |
+|---|---|
+| [Connect in 3 steps](/connect) | Link your account to Claude, ChatGPT or Cursor |
+| [What you can ask](/what-you-can-ask) | Example questions that work well |
+| [Tool reference](/tool-reference) | All 28 tools, what each one reads or writes |
+| [Data & security](/data-and-security) | What the assistant can see, and what it cannot |
+| [Privacy](/privacy) | What leaves SenPrints, where it goes, how long we keep it |
+| [Support](/support) | When something does not work |
+
+---
+
+## What it is
+
+The connector is a hosted MCP server operated by SenPrints at
+`https://api.senprints.com/mcp/seller`. You do not need to install or run software locally.
+Connect it as a remote service and sign in with your SenPrints seller credentials.
+
+Every request is filtered server-side by the seller ID authorised for the connection. The
+connector does not require a client-side account-filtering setting, and one seller's
+connection cannot access another seller's data.
+
+## What it is not
+
+- **Not an admin tool.** It cannot see other sellers, platform totals, or anything staff-only.
+- **Not a bulk editor.** Of 28 tools, 26 are read-only. The two write tools publish a blog post
+  or switch campaigns between active and inactive. They preview by default and apply only when
+  confirmation is set; automatic client approval can provide confirmation on the first call.
+- **Not a payments tool.** It can tell you what your balance and payouts look like. It cannot
+  move money, request a payout, or change a payment method.
+
+## Requirements
+
+- An active SenPrints seller account.
+- An AI client that supports remote MCP servers over streamable HTTP with OAuth. Supported
+  clients include Claude (web, desktop and mobile), ChatGPT and Cursor.
+
+---
+
+# Connect in 3 steps
+
+You can connect through SenPrints sign-in or with a manually generated access token. Use the
+sign-in method when your AI client supports it.
+
+---
+
+## Method 1 — Sign in with SenPrints (recommended)
+
+Your AI client opens SenPrints for sign-in and connection approval. The client then stores and
+refreshes its token. You do not need to copy credentials, and you can revoke the connection
+from your seller dashboard.
+
+### 1. Add the server in your AI client
+
+Use this URL:
+
+```
+https://api.senprints.com/mcp/seller
+```
+
+Where to put it:
+
+| Client | Where |
+|---|---|
+| Claude | Settings → Connectors → Add custom connector |
+| ChatGPT | Settings → Connectors → Add |
+| Cursor | Settings → MCP → Add new MCP server |
+
+The client registers automatically. You do not need to create a client ID or client secret.
+
+> **If your dashboard is on the seller-center domain**, use
+> `https://api.senprints.com/mcp/seller-custom` instead. It provides the same connector and
+> tools but directs you to the corresponding login page. If you are unsure, try the first URL.
+> If it directs you to a domain where you do not have an account, use the other URL.
+
+### 2. Approve the connection
+
+The client opens a SenPrints login page. Sign in and approve the consent screen. The screen
+identifies the account being connected; check it if you have more than one account.
+
+### 3. Ask something
+
+First ask **"which SenPrints account am I connected to?"** The assistant returns the account
+name and email. Confirm that they match the account you intended to connect.
+
+---
+
+## Method 2 — Access token
+
+Use a manual access token only when your client does not support the sign-in flow.
+
+1. Open **Settings → MCP** in your seller dashboard.
+2. Click **Generate token**. Copy it — it is shown once and never again.
+3. Paste it into your client as a bearer token for `https://api.senprints.com/mcp/seller`.
+
+Notes on tokens:
+
+- A token is valid for **90 days**. Generate a new token after it expires.
+- You can hold **5 tokens at a time**. Generating a sixth automatically revokes the oldest, so
+  a device you no longer use cannot retain a working token indefinitely.
+- Revoke any token at any time from the same screen. Revoking takes effect immediately.
+- Treat a token as a password. Anyone holding it can read your account. Do not paste it into a
+  shared document, a screenshot, or a support ticket.
+
+---
+
+## Disconnecting
+
+For either method, **Settings → MCP** in your dashboard lists every active connection and
+token. Revoke an entry there to remove its access immediately. You do not need to change your
+SenPrints password.
+
+---
+
+## If it does not connect
+
+| What you see | What it usually means |
+|---|---|
+| Login page loads, approval fails | You are signed into a different SenPrints account in that browser. Sign out and retry. |
+| Connects, but the assistant says it cannot see anything | You are a **team member** on someone else's account. See below. |
+| "Too many requests" | You have gone over the per-minute limit. Wait a minute and continue. |
+| Token rejected immediately | The token expired (90 days) or was revoked. Generate a new one. |
+
+**Team members:** the connector links the account you use to sign in, not an account to which
+you have been granted team access. If you manage another seller's store as a team member, the
+connector shows your own account, which is usually empty. The account owner must connect their
+account.
+
+---
+
+# What you can ask
+
+You do not need to specify tool names. Ask a question about your seller account, and the
+assistant selects the relevant tool. The examples below are common seller questions grouped
+by task.
+
+---
+
+## How am I doing?
+
+- *"How were sales last month?"*
+- *"Compare this week to last week."*
+- *"What's my average order value this quarter?"*
+- *"Show me daily sales for the last 30 days."*
+
+The assistant answers from your account data, including paid orders, items, sales, profit,
+average order value (AOV), visits and funnel steps between a visit and a paid order.
+
+## Where are my sales coming from?
+
+- *"Which countries are growing fastest for me?"*
+- *"Do people buy more on mobile or desktop?"*
+- *"Which of my stores made the most money this month?"*
+- *"Which ad campaign actually converted?"*
+
+## Chasing a specific order
+
+- *"Find the order for maria@example.com."*
+- *"What's the status of order SP-12345?"*
+- *"Any cancel requests waiting on me?"*
+- *"Were there refunds this week, and why?"*
+
+## Money
+
+- *"What's my balance?"*
+- *"How much have I earned this month?"*
+- *"When was my last payout and what state is it in?"*
+- *"Break down my transactions by type for October."*
+
+## Products and campaigns
+
+- *"Which products sold best this month?"*
+- *"List my active campaigns."*
+- *"Show me campaign 'summer-tee'."*
+- *"Deactivate these three campaigns."* — previews the change by default and applies it when
+  confirmation is set
+
+## Storefront blog
+
+- *"What blog posts do I have on store X?"*
+- *"Write a post about caring for printed hoodies and publish it to my main store."*
+  — previews the target, state, slug and body size by default, then saves when confirmation is
+  set
+
+Both write tools are marked `destructiveHint`. A compliant client prompts before applying a
+change, but the server does not require a separate human confirmation round trip. A client
+configured for automatic approval can submit confirmation on its first call.
+
+---
+
+## Getting better answers
+
+**Name the window.** "Last month" and "the last 30 days" cover different periods and can
+produce different results. The assistant uses your account timezone.
+
+**Name the store** if you have several. Otherwise, the result covers all of them.
+
+**Ask for the reason, not just the number.** "Sales dropped last week; what changed?" asks the
+assistant to compare periods, countries, devices and stores to identify where the decline
+occurred.
+
+**Check the account first if you have more than one.** Ask *"Which account am I connected
+to?"* before requesting account data. This check takes a second and helps avoid querying the
+wrong account.
+
+---
+
+## What it will not do
+
+- Show you another seller's data, platform totals, or anything staff-only.
+- Move money, request a payout, or change a payment method.
+- Apply a write without confirmation set. Without confirmation, the tool returns a preview.
+  With automatic client approval, confirmation can be supplied on the first call.
+- Delete a campaign or an order. It can only switch campaigns between active and inactive.
+
+---
+
+# Tool reference
+
+The connector provides 28 tools: **26 are read-only and 2 can write. Both write tools return a
+preview by default and apply a change only when confirmation is set.**
+
+Read-only tools are marked `readOnlyHint` in the protocol, so a compliant client can run them
+without prompting. The two write tools are marked `destructiveHint`, so a compliant client
+prompts before applying a change. The server does not enforce a separate human confirmation
+round trip; a client configured for automatic approval can send confirmation on its first
+call.
+
+Every tool is filtered server-side to the seller account authorised for the connection.
+References to "your" data below mean data filtered by the backend, not by the assistant.
+
+---
+
+## Sales & analytics — 8 tools, all read
+
+| Tool | What it returns |
+|---|---|
+| Sales overview | Headline KPIs for a window: paid orders, items, sales, profit, AOV, visits, funnel events, refunds, plus live balance |
+| Sales chart | Daily time series for sales, visits and each funnel step |
+| Compare sales periods | The same KPIs for a window *and* the one before it — this week vs last week, this month vs last month |
+| Sales by country | Sales, orders and profit per buyer country, biggest first |
+| Sales by device | Sales, orders and visits per device type |
+| Sales by store | Sales, orders, profit and visits per store you own |
+| Top products | Best-selling template products with items sold, sales and profit |
+| Ads breakdown | Sales, orders and profit attributed to ads, grouped by campaign, source, medium or content |
+
+> Your campaigns can be cross-listed on the marketplace and on stores you do not own. Those
+> rows are combined in an anonymous **"Other"** bucket. Your figures are included, but the
+> other party's store identity is not returned.
+
+## Orders — 3 tools, all read
+
+| Tool | What it returns |
+|---|---|
+| Search orders | Your orders, filtered by status, payment status, fulfilment status, customer email, order number or date range |
+| Get order | One order by id or order number, with its line items |
+| Search cancel requests | Cancel requests on your orders |
+
+## Customers — 1 tool, read
+
+| Tool | What it returns |
+|---|---|
+| Search customers | Buyers who purchased from your stores, by exact email or name substring |
+
+This tool returns the same columns shown in the dashboard `/customers` list: name, email,
+phone, country, city, state, store, and the number and value of orders placed **with you**.
+Buyer credentials, payment-processor IDs and platform-wide totals are never returned. See
+[Data & security](/data-and-security).
+
+## Campaigns — 3 tools, 1 writes
+
+| Tool | What it does |
+|---|---|
+| Search campaigns | Your campaigns, filtered by status, slug or created date |
+| Get campaign | One campaign by id or slug, including its pricing and cost fields |
+| **Set campaign status** | **Writes.** Switches campaigns between active and inactive |
+
+Without confirmation, **Set campaign status** returns a preview showing which campaigns would
+change, their current and proposed states, and any campaigns it refuses because they do not
+belong to you or are blocked by the platform. It applies the change only when confirmation is
+set. A compliant client prompts before applying, but automatic approval can submit
+confirmation on the first call. The tool cannot delete a campaign or change campaigns in
+draft, reviewing or blocked states.
+
+## Stores — 2 tools, all read
+
+| Tool | What it returns |
+|---|---|
+| Search stores | Your stores, by keyword or status |
+| Get store | One store by id, domain or sub-domain |
+
+Marketplace connection tokens are never included, and webhook URLs are removed.
+
+## Money — 6 tools, all read
+
+| Tool | What it returns |
+|---|---|
+| Balance summary | Billing totals grouped by type and status, plus a payout breakdown |
+| Search transactions | Sales, commissions, payouts, fees, refunds and topups |
+| Search payouts | Your payout queue and history |
+| Get payout | One payout by id |
+| Search refunds | Payment-gateway refunds on your orders |
+| Search topups | Your topup transactions |
+
+Amounts are in USD, the platform settlement currency. Gateway response traces, payout
+signatures and raw topup payloads are removed before a response is returned.
+
+These tools cannot move money. The connector has no tool to request a payout or change a
+payment method.
+
+## Blog & SEO — 4 tools, 1 writes
+
+| Tool | What it does |
+|---|---|
+| Search blog posts | Your storefront posts, by store, keyword, category or published state |
+| Get blog post | One post including its full HTML body |
+| Search blog categories | Your categories, so a post can be filed correctly |
+| **Create or update a blog post** | **Writes, and publishes to your public storefront** |
+
+Without confirmation, **Create or update a blog post** previews whether it would create or
+update a post, the resolved URL slug, target store, published state and body size. The preview
+reports the body size, not the full body content. The tool saves only when confirmation is set;
+automatic client approval can submit confirmation on the first call. On update, it retains the
+existing slug unless you provide a new one. All HTML is sanitised when saved, so scripts and
+event handlers are removed from submitted content.
+
+## Account — 1 tool, read
+
+| Tool | What it returns |
+|---|---|
+| Who am I | The seller id, email, name, currency and timezone this session is bound to |
+
+Use this tool first if you have more than one SenPrints account.
+
+---
+
+# Data & security
+
+This page describes the connector's account boundaries, write controls, excluded data, rate
+limits and authentication.
+
+---
+
+## One account, enforced by the backend
+
+Every tool filters by the seller ID authorised for the connection. SenPrints enforces this in
+the backend rather than relying on the assistant to select the correct account. The filter
+applies regardless of the assistant's reasoning or the prompt content.
+
+Requesting a record ID that belongs to another seller returns the same "not found" response as
+an ID that does not exist. The response does not reveal whether another seller's order or
+campaign exists.
+
+## Read-only unless you say otherwise
+
+26 of 28 tools cannot change anything. The two that can are:
+
+- **Set campaign status** — active ↔ inactive
+- **Create or update a blog post** — publishes to your public storefront
+
+Without confirmation, both tools return a preview of the proposed change. They apply a change
+only when confirmation is set. Both are marked `destructiveHint` in the protocol, so a
+compliant client prompts before applying a change. Neither tool can delete data.
+
+The server checks for confirmation but does not enforce a separate human confirmation round
+trip. If your AI client is configured to approve tool calls automatically, it can submit
+confirmation on the first call and the change is applied without a separate prompt. Keep
+approval manual for this connector if you want the client to show each proposed write before
+applying it.
+
+## What is never returned
+
+Some fields are removed before any response leaves SenPrints, regardless of which tool asked:
+
+| Removed | Why |
+|---|---|
+| Buyer passwords and two-factor secrets | Credentials. A 2FA secret would let anyone generate valid codes indefinitely. |
+| Payment-processor customer ids | Identifies the buyer inside Stripe. |
+| Buyer balances, holds and loyalty points | Money we hold for the buyer; not seller-facing. |
+| Internal staff assignments, risk flags and notes | Platform-internal, with no equivalent anywhere in the seller product. |
+| Payout signatures, gateway response traces, raw topup payloads | Contain gateway internals and sometimes account details. |
+| Marketplace connection tokens and webhook URLs | Credentials for connected storefronts. |
+
+Customer results are restricted to the columns shown in your `/customers` dashboard. Order
+counts and spend cover **your stores only**, not the buyer's totals across the platform. The
+buyer's internal platform trust status is never returned.
+
+## What the connector cannot do
+
+- Reach another seller's data, or any platform-wide or staff-only view.
+- Move money: no payout requests, no transfers, no payment-method changes.
+- Delete orders, campaigns, customers or stores.
+- Read your AI chat history, files or other client-side data. The connector responds to tool
+  calls and does not collect data from the client.
+
+## Rate limits
+
+The connector applies two rate limits to constrain automated loops and traffic floods:
+
+- **60 requests per minute per account**, once authenticated.
+- **300 requests per minute per IP address**, applied before authentication.
+
+If either limit is exceeded, the connector returns a standard "too many requests" response.
+Requests can resume after one minute.
+
+## Transport and authentication
+
+- HTTPS only, streamable HTTP transport.
+- OAuth 2.1 with PKCE (S256) and dynamic client registration. Your client registers itself;
+  you never create or paste a client secret.
+- Access tokens are short-lived and refreshed automatically. Manual tokens last 90 days.
+- Tokens are scoped specifically to the MCP connector and cannot be reused with other
+  SenPrints APIs.
+- Revoke any connection or token instantly from **Settings → MCP** in your dashboard. You do
+  not need to change your password.
+
+## What SenPrints records
+
+SenPrints records connector requests in an internal audit log for abuse investigations and
+support. The log contents, access and retention are described in
+[Privacy](/privacy).
+
+## Reporting a problem
+
+If the connector returns data that does not belong to your account, stop using it and email
+**privacy@senprints.com**. Include the question, approximate time and account email. Do not
+include tokens.
+
+---
+
+# Privacy — SenPrints Seller Connector
+
+*Last updated: TBC on publication*
+
+This notice explains what data the **SenPrints Seller Connector** sends when you connect an AI
+assistant to your seller account, who receives it and how long SenPrints retains connector
+records.
+
+This notice supplements and does not replace the
+[SenPrints Privacy Policy](https://senprints.com/page/privacy), which covers the print-on-demand
+platform. Where the two overlap, the platform policy governs. This notice covers the connector,
+which was not included when the platform policy was written.
+
+---
+
+## The short version
+
+When you connect an AI assistant, you instruct SenPrints to send your business data, including
+your buyers' personal information, to the third party you selected. SenPrints does not select
+or control the assistant. The provider's privacy policy applies to its handling of the data
+after receipt.
+
+---
+
+## What data the connector can access
+
+Only data belonging to your own seller account:
+
+| Category | Includes |
+|---|---|
+| Sales and analytics | Order counts, revenue, profit, visits, funnel events, by day / country / device / store / ad campaign |
+| Orders | Order records and line items, statuses, and the buyer name, email, phone and address attached to them |
+| Customers | Buyers who purchased from your stores: name, email, phone, country, city, state, and their order count and spend **with your stores** |
+| Campaigns | Your campaign records, including pricing and cost fields |
+| Stores | Your storefront records |
+| Billing | Transactions, payouts, refunds, topups, balance |
+| Blog | Your storefront blog posts and categories |
+
+Fields listed under *What is never returned* in [Data & security](/data-and-security) are
+removed before any response leaves SenPrints. That includes buyer credentials, two-factor
+secrets, payment-processor identifiers and platform-internal risk data.
+
+## Personal data of your buyers
+
+Orders and customer records contain your buyers' personal data, including names, email
+addresses, phone numbers and shipping addresses. When you ask your assistant a question that
+touches those records, that personal data is transmitted to the AI provider you connected.
+
+For your storefront's buyer data, you are the controller and SenPrints is your processor. By
+connecting an AI assistant, you instruct SenPrints to disclose that data to a further recipient
+of your choosing. You are responsible for establishing a lawful basis for the disclosure. If
+rules on international transfers or sub-processors apply to you, check that your chosen
+assistant meets those requirements before connecting.
+
+Limit requests to the data you need. "Find the order for this email" sends one buyer's details;
+"List all my customers" sends many.
+
+## Who receives it
+
+- **The AI provider you connected** — Anthropic, OpenAI, Cursor or another client you chose.
+  Their handling is governed by their own terms and privacy policy, not ours.
+- **No one else.** SenPrints does not sell connector data, does not use it to train models, and
+  does not share it with advertisers or other sellers.
+
+Third-party service providers used by SenPrints to operate the platform are listed in
+the [SenPrints Privacy Policy](https://senprints.com/page/privacy).
+
+No additional processor operates the connector or its audit log. The connector and logging
+infrastructure are operated by SenPrints.
+
+## What SenPrints stores
+
+SenPrints keeps an internal audit log of connector activity. It records the account, tool,
+arguments, response, time, IP address and client user agent. The log is used to investigate
+abuse, diagnose support issues and determine which actions the assistant performed.
+
+Because responses are recorded, the log can contain buyer personal data.
+
+**Who can read it.** SenPrints engineering and support staff. You can request entries for your
+account at any time. See [Support](/support).
+
+**How long tokens last.** Every connector credential has a fixed lifetime:
+
+| Credential | Lifetime |
+|---|---|
+| Authorisation code (issued during sign-in, exchanged immediately) | 5 minutes |
+| Access token — the credential your assistant sends on each request | 1 hour |
+| Refresh token — used to obtain a new access token without signing in again | 90 days |
+| Access token you create by hand on the settings page | 90 days |
+
+Revoking a token on the settings page takes effect immediately. Signing out of the connector
+in your AI client ends the session.
+
+**How long the audit log is kept.** Entries are held on logging infrastructure operated by
+SenPrints under the same retention rules as the platform's other operational logs. They are
+used only for security review and support. To obtain the current retention period or request
+removal of your account's entries, email privacy@senprints.com.
+
+SenPrints does not store your AI conversations. It receives individual tool calls from the
+assistant, not the surrounding chat.
+
+## Your controls
+
+- **Revoke at any time.** **Settings → MCP** in your seller dashboard lists every connection
+  and token. Revocation takes effect immediately and prevents further access through that
+  credential.
+- **Manual tokens expire after 90 days** and are capped at five per account; issuing a sixth
+  revokes the oldest automatically.
+- **Deletion requests.** To request deletion of connector audit records relating to your
+  account, email **privacy@senprints.com**. Deletion of your SenPrints account itself is
+  covered by the platform policy.
+- **Your buyers' rights** — access, correction, deletion — are handled as they are for the rest
+  of the platform; see the [SenPrints Privacy Policy](https://senprints.com/page/privacy).
+
+## Children
+
+The connector is intended for SenPrints sellers and is not directed at anyone under 18.
+
+## Changes
+
+SenPrints will announce material changes to this notice in the seller dashboard before they
+take effect. The date at the top identifies the current version.
+
+## Contact
+
+Email **privacy@senprints.com** for privacy questions, deletion requests or questions about
+this notice.
+
+For suspected data exposure through the connector, email the same address with the question
+and approximate time. Do not include access tokens.
+
+---
+
+# Support
+
+## Common problems
+
+**"It says I have no orders, but I do."**
+You may be connected as a team member rather than the account owner. The connector links the
+account you use to sign in, not an account to which you have been granted access. Ask *"which
+account am I connected to?"* If it identifies your account rather than the store you manage,
+the account owner must connect their account.
+
+**"The numbers don't match my dashboard."**
+Check the reporting period and store. Specify the period, for example "1–31 October" rather
+than "last month", and name the store if you have more than one. The connector uses your
+account timezone.
+
+**"It won't connect."**
+See [If it does not connect](connect.md#if-it-does-not-connect).
+
+**"Too many requests."**
+You have exceeded the limit of 60 requests per minute for one account. Wait one minute before
+continuing. If it occurs during normal use, contact support because the client may be repeating
+requests.
+
+**"My token stopped working."**
+Manual tokens last 90 days. Generate a new one at **Settings → MCP**. Note that issuing a
+sixth token automatically revokes the oldest.
+
+**"It changed something I didn't approve."**
+Both write tools return a preview by default and apply only when confirmation is set. They are
+marked `destructiveHint`, so a compliant client prompts before applying a change. The server
+does not require a human second round trip: if your AI client approves tool calls
+automatically, it can submit confirmation on the first call without prompting you. Disable
+automatic approval for this connector if you want the client to show each proposed write. If
+automatic approval is disabled and an unexpected change still occurs, revoke the connection
+at **Settings → MCP** and contact support with the approximate time.
+
+---
+
+## Getting help
+
+| For | Contact |
+|---|---|
+| Connector not working, wrong results, general questions | Your usual SenPrints seller support channel |
+| Privacy, deletion requests, data questions | **privacy@senprints.com** |
+| Suspected data exposure — data that is not yours | **privacy@senprints.com**, immediately |
+
+### What to include
+
+- The account email.
+- The question you asked, word for word.
+- Roughly when, and your timezone.
+- Which AI client you use.
+
+**Never send an access token** in a ticket, email or screenshot. If you believe a token has
+been exposed, revoke it at **Settings → MCP** before contacting support.
+
+---
+
+## Reference
+
+- Server URL: `https://api.senprints.com/mcp/seller`
+- Seller-center variant: `https://api.senprints.com/mcp/seller-custom`
+- Transport: streamable HTTP
+- Auth: OAuth 2.1, PKCE S256, dynamic client registration
+- 28 tools — 26 read, 2 write
