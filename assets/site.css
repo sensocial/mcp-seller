@@ -702,7 +702,8 @@ tr.w td:first-child { box-shadow: inset 3px 0 0 var(--accent-mark); }
 }
 
 .foot-legal { margin: 0; }
-.foot .legal { font-weight: 600; color: var(--muted); }
+.foot .legal { font-weight: 600; color: var(--muted); text-decoration: none; }
+.foot .legal:hover { color: var(--accent); text-decoration: underline; }
 .foot .reg { font-family: var(--mono); font-size: 0.78rem; }
 
 .foot-links { display: flex; flex-wrap: wrap; gap: 0.35rem 1.3rem; }
@@ -766,6 +767,9 @@ tr.w td:first-child { box-shadow: inset 3px 0 0 var(--accent-mark); }
   .brand span { display: none; }
   .search { max-width: none; }
   .search kbd { display: none; }
+
+  /* Two short lines read better than one line broken mid-list. */
+  .foot-in { flex-direction: column; gap: 0.6rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
