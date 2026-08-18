@@ -173,15 +173,10 @@ svg.i {
 }
 
 .brand-mark {
-  width: 1.4rem; height: 1.4rem;
-  background: var(--accent-mark);
-  color: var(--accent-ink);
-  display: grid;
-  place-items: center;
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  font-weight: 700;
+  width: 1.5rem;
+  height: 1.5rem;
   flex: none;
+  object-fit: contain;
 }
 
 .topbar-sp { margin-left: auto; }
