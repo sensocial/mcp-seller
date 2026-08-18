@@ -236,4 +236,57 @@
       }
     });
   }
+
+  // ---- mobile navigation -------------------------------------------------
+  // Below 900px the sidebar is a panel behind a Menu button rather than a
+  // horizontal strip. A strip meant swiping sideways to reach Support, with the
+  // last item sliced in half as the only hint that more existed; a disclosure
+  // keeps every destination one tap away and restores the group headings.
+  var navBtn = document.querySelector(".navtoggle");
+  var navPanel = document.getElementById("nav");
+
+  if (navBtn && navPanel) {
+    var setNav = function (open) {
+      navBtn.setAttribute("aria-expanded", String(open));
+      document.documentElement.toggleAttribute("data-nav-open", open);
+    };
+
+    var isOpen = function () {
+      return navBtn.getAttribute("aria-expanded") === "true";
+    };
+
+    navBtn.addEventListener("click", function () {
+      var open = !isOpen();
+      setNav(open);
+      if (open) {
+        var first = navPanel.querySelector("a");
+        if (first) first.focus();
+      }
+    });
+
+    // Following a link navigates away, but closing first keeps the panel from
+    // flashing on browsers that paint before unload.
+    navPanel.addEventListener("click", function (e) {
+      if (e.target.closest("a")) setNav(false);
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && isOpen()) {
+        setNav(false);
+        navBtn.focus();
+      }
+    });
+
+    document.addEventListener("click", function (e) {
+      if (isOpen() && !e.target.closest("#nav") && !e.target.closest(".navtoggle")) {
+        setNav(false);
+      }
+    });
+
+    // Leaving the breakpoint must not strand the panel in an open state that
+    // desktop CSS no longer styles.
+    window.matchMedia("(min-width: 901px)").addEventListener("change", function (ev) {
+      if (ev.matches) setNav(false);
+    });
+  }
 })();

@@ -20,7 +20,7 @@
 <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
 <link rel="apple-touch-icon" href="/icon-512.png">
 <link rel="alternate" type="text/markdown" href="https://mcp.senprints.com/what-you-can-ask.md" title="Markdown source">
-<link rel="preload" href="/assets/fonts/ibm-plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/site.css">
 <script>
 (function(){try{var t=localStorage.getItem('sp-theme');
@@ -72,6 +72,7 @@ if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)
 
 <header class="topbar">
   <div class="topbar-in">
+    <button class="navtoggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Navigation menu"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg><svg class="i x" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg></button>
     <a class="brand" href="/"><img class="brand-mark" src="/icon-128.png" width="128" height="128" alt="" decoding="async"><span>Seller Connector</span></a>
     <div class="search" role="search">
       <div class="search-in">
@@ -88,7 +89,7 @@ if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)
 </header>
 
 <div class="shell">
-<nav class="sidebar" aria-label="Documentation">
+<nav class="sidebar" id="nav" aria-label="Documentation">
 <p class="nav-group">Getting started</p><ul class="nav-list">
 <li><a href="/"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"/></svg>Overview</a></li>
 <li><a href="/connect"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v3a6 6 0 0 1-12 0V8Z"/></svg>Connect</a></li>

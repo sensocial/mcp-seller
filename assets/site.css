@@ -190,6 +190,27 @@ svg.i {
 
 .topbar-sp { margin-left: auto; }
 
+/* The Menu button only exists below the sidebar breakpoint. 44px square to meet
+   the minimum touch target; the X swaps in while the panel is open. */
+.navtoggle {
+  display: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-left: -0.6rem;
+  place-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.15rem;
+}
+
+.navtoggle:hover { color: var(--fg); }
+.navtoggle .x { display: none; }
+[data-nav-open] .navtoggle .x { display: block; }
+[data-nav-open] .navtoggle svg:not(.x) { display: none; }
+
 /* three-state theme switch */
 
 .themeswitch {
@@ -720,43 +741,39 @@ tr.w td:first-child { box-shadow: inset 3px 0 0 var(--accent-mark); }
 @media (max-width: 900px) {
   .shell { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .hero { grid-template-columns: 1fr; gap: 1.8rem; }
+  .navtoggle { display: grid; }
 
-  /* One scrolling strip, not one per group. The three nav-lists are separate
-     <ul>s so scrolling each of them independently produced three stacked rows
-     with the last item sliced mid-word; the scroller has to be their parent. */
+  /* Panel, not a strip. Anchored under the sticky topbar and closed by default,
+     so no sideways gesture is ever required to reach a page. */
   .sidebar {
-    position: static;
-    max-height: none;
-    display: flex;
-    gap: 0.4rem;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    -webkit-overflow-scrolling: touch;
-    padding: 0.9rem 0;
-    border-bottom: 1px solid var(--line);
-    scrollbar-width: none;
+    position: fixed;
+    top: 3.5rem;
+    left: 0;
+    right: 0;
+    z-index: 25;
+    max-height: calc(100vh - 3.5rem);
+    max-height: calc(100dvh - 3.5rem);
+    overflow-y: auto;
+    display: none;
+    padding: 1rem var(--gutter) 1.6rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line-strong);
+    box-shadow: var(--shadow);
   }
 
-  .sidebar::-webkit-scrollbar { display: none; }
+  [data-nav-open] .sidebar { display: block; }
+  [data-nav-open] { overflow: hidden; }
 
-  .nav-group { display: none; }
+  /* The group headings are the reason a panel beats a strip — put them back. */
+  .nav-group { display: block; margin-top: 1.1rem; }
+  .nav-group:first-child { margin-top: 0; }
+  .nav-group + .nav-list { margin-bottom: 0; }
 
-  .nav-list {
-    flex-direction: row;
-    flex: none;
-    gap: 0.4rem;
-    margin: 0;
-    padding: 0;
-  }
+  .nav-list { flex-direction: column; gap: 0; margin: 0; padding: 0; }
 
-  .nav-list a {
-    white-space: nowrap;
-    border-left: 0;
-    border-bottom: 2px solid var(--line);
-    padding: 0.35rem 0.6rem;
-  }
+  /* 44px rows: a menu is tapped, so the target has to be finger-sized. */
+  .nav-list a { padding: 0.7rem 0.7rem; min-height: 2.75rem; }
 
-  .nav-list a[aria-current="page"] { border-left: 0; border-bottom-color: var(--accent-mark); }
   .content { padding-top: 2rem; }
 }
 
