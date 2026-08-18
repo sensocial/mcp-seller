@@ -1,5 +1,5 @@
-IBM Plex Sans and JetBrains Mono are licensed under the SIL Open Font License 1.1.
+Poppins and JetBrains Mono are licensed under the SIL Open Font License 1.1.
 https://openfontlicense.org/
 
-IBM Plex Sans  - Copyright 2017 IBM Corp.        https://github.com/IBM/plex
+Poppins        - Copyright 2020 Indian Type Foundry & Jonny Pinhorn  https://github.com/itfoundry/Poppins
 JetBrains Mono - Copyright 2020 JetBrains s.r.o. https://github.com/JetBrains/JetBrainsMono
