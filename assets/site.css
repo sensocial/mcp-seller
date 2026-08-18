@@ -720,26 +720,33 @@ tr.w td:first-child { box-shadow: inset 3px 0 0 var(--accent-mark); }
   .shell { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .hero { grid-template-columns: 1fr; gap: 1.8rem; }
 
+  /* One scrolling strip, not one per group. The three nav-lists are separate
+     <ul>s so scrolling each of them independently produced three stacked rows
+     with the last item sliced mid-word; the scroller has to be their parent. */
   .sidebar {
     position: static;
     max-height: none;
-    overflow: visible;
-    padding: 1.2rem 0 0;
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.9rem 0;
     border-bottom: 1px solid var(--line);
+    scrollbar-width: none;
   }
+
+  .sidebar::-webkit-scrollbar { display: none; }
 
   .nav-group { display: none; }
 
   .nav-list {
     flex-direction: row;
-    overflow-x: auto;
+    flex: none;
     gap: 0.4rem;
     margin: 0;
-    padding-bottom: 0.9rem;
-    scrollbar-width: none;
+    padding: 0;
   }
-
-  .nav-list::-webkit-scrollbar { display: none; }
 
   .nav-list a {
     white-space: nowrap;
