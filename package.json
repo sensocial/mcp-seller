@@ -1,0 +1,15 @@
+{
+  "name": "mcp-seller-docs",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Public documentation site for the SenPrints Seller MCP connector",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0"
+  }
+}
