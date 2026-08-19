@@ -160,6 +160,7 @@ svg.i {
 }
 
 .topbar-in {
+  position: relative;
   max-width: 88rem;
   margin: 0 auto;
   padding: 0 var(--gutter);
@@ -179,7 +180,10 @@ svg.i {
   color: var(--fg);
   text-decoration: none;
   white-space: nowrap;
+  min-width: 0;
 }
+
+.brand span { overflow: hidden; text-overflow: ellipsis; }
 
 .brand-mark {
   width: 1.5rem;
@@ -190,13 +194,17 @@ svg.i {
 
 .topbar-sp { margin-left: auto; }
 
-/* The Menu button only exists below the sidebar breakpoint. 44px square to meet
-   the minimum touch target; the X swaps in while the panel is open. */
-.navtoggle {
+/* Bar icon buttons: Search, Menu, and the Close that ends a mobile search.
+   All three exist only below the sidebar breakpoint and all three sit at the
+   right end of the bar, so the brand stays in the first position the eye lands
+   on and the controls stay under the thumb. 44px square is the touch minimum.
+   `flex: none` is load-bearing: without it these shrink under pressure and the
+   bar overflows the viewport instead of the buttons holding their size. */
+.iconbtn {
   display: none;
   width: 2.75rem;
   height: 2.75rem;
-  margin-left: -0.6rem;
+  flex: none;
   place-items: center;
   background: transparent;
   border: 0;
@@ -206,10 +214,13 @@ svg.i {
   font-size: 1.15rem;
 }
 
-.navtoggle:hover { color: var(--fg); }
-.navtoggle .x { display: none; }
+.iconbtn:hover { color: var(--fg); }
+
+/* One button, two glyphs: the X swaps in while the panel is open so Menu reads
+   as a toggle rather than a second destination. */
+.iconbtn .x { display: none; line-height: 0; }
 [data-nav-open] .navtoggle .x { display: block; }
-[data-nav-open] .navtoggle svg:not(.x) { display: none; }
+[data-nav-open] .navtoggle > svg { display: none; }
 
 /* three-state theme switch */
 
@@ -240,9 +251,27 @@ svg.i {
   box-shadow: inset 0 -2px 0 var(--accent-mark);
 }
 
+/* Inside the mobile nav panel the same control gets the room to be honest: full
+   width, 44px tall, and each segment labelled. Three unlabelled 32px squares in
+   a cramped bar were both under the touch minimum and a guess. */
+.nav-theme { display: none; margin-top: 1.6rem; }
+
+.themeswitch.wide { width: 100%; }
+
+.themeswitch.wide button {
+  flex: 1;
+  width: auto;
+  height: 2.75rem;
+  grid-auto-flow: column;
+  gap: 0.4rem;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
 /* ============ search ============ */
 
-.search { position: relative; flex: 1 1 auto; max-width: 22rem; }
+.search { position: relative; flex: 1 1 auto; min-width: 0; max-width: 22rem; }
 
 .search-in {
   display: flex;
@@ -743,6 +772,11 @@ tr.w td:first-child { box-shadow: inset 3px 0 0 var(--accent-mark); }
   .hero { grid-template-columns: 1fr; gap: 1.8rem; }
   .navtoggle { display: grid; }
 
+  /* One appearance control, not two: below this width it lives in the panel,
+     where it has room for labels. */
+  .topbar-in .themeswitch { display: none; }
+  .nav-theme { display: block; }
+
   /* Panel, not a strip. Anchored under the sticky topbar and closed by default,
      so no sideways gesture is ever required to reach a page. */
   .sidebar {
@@ -780,10 +814,48 @@ tr.w td:first-child { box-shadow: inset 3px 0 0 var(--accent-mark); }
 
 @media (max-width: 620px) {
   :root { --gutter: 1.1rem; }
-  .topbar-in { gap: 0.6rem; }
-  .brand span { display: none; }
-  .search { max-width: none; }
+  /* 8px is the floor between adjacent touch targets, so the Search and Menu
+     hit areas cannot be confused for one another. */
+  .topbar-in { gap: 0.5rem; }
   .search kbd { display: none; }
+
+  /* A permanent search field, a three-part theme switch and a Menu button do
+     not fit beside the brand on a 360px screen — that combination was what
+     pushed the bar 13px past the viewport and made the whole page scroll
+     sideways. So the field collapses to its icon, the way Stripe, Tailwind and
+     VitePress all handle it, and expands over the bar when tapped. The brand
+     keeps its wordmark instead: a logo earns the space a search field was
+     holding. */
+  .search {
+    position: absolute;
+    left: var(--gutter);
+    right: var(--gutter);
+    max-width: none;
+    display: none;
+  }
+
+  .searchtoggle { display: grid; }
+
+  [data-search-open] .search { display: block; }
+  [data-search-open] .searchclose { display: grid; }
+  [data-search-open] .brand,
+  [data-search-open] .searchtoggle,
+  [data-search-open] .navtoggle { display: none; }
+
+  /* The Close button rides at the right edge of the bar, clear of the field.
+     The spacer has to go with it: two auto margins in the same row would split
+     the free space and park Close in the middle of the field. */
+  [data-search-open] .topbar-sp { display: none; }
+  [data-search-open] .searchclose { position: relative; z-index: 1; margin-left: auto; }
+  [data-search-open] .search { right: calc(var(--gutter) + 2.75rem); }
+
+  /* 44px: the field is a touch target too, not just a box for text. */
+  .search-in { height: 2.75rem; }
+
+  /* Results run to the gutter rather than stopping under the Close button —
+     the field is narrow enough already without the snippets inheriting its
+     width. */
+  [data-search-open] .results { right: -2.75rem; }
 
   /* Two short lines read better than one line broken mid-list. */
   .foot-in { flex-direction: column; gap: 0.6rem; }

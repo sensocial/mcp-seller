@@ -104,6 +104,19 @@
   var box = document.getElementById("q");
   var out = document.getElementById("results");
 
+  // Below 620px the field is collapsed to its icon and expands over the bar.
+  // setSearch is a no-op above that width, where the field is always visible,
+  // so the rest of the search code can call it unconditionally.
+  var bar = document.querySelector(".topbar-in");
+  var searchBtn = document.querySelector(".searchtoggle");
+  var searchX = document.querySelector(".searchclose");
+
+  function setSearch(open) {
+    if (!bar) return;
+    bar.toggleAttribute("data-search-open", open);
+    if (searchBtn) searchBtn.setAttribute("aria-expanded", String(open));
+  }
+
   if (box && out) {
     var index = null;
     var loading = false;
@@ -211,6 +224,7 @@
         box.value = "";
         run("");
         box.blur();
+        setSearch(false);
       } else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
         if (!items.length) return;
         e.preventDefault();
@@ -232,8 +246,37 @@
     document.addEventListener("keydown", function (e) {
       if (e.key === "/" && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) {
         e.preventDefault();
+        setSearch(true);
         box.focus();
       }
+    });
+
+    if (searchBtn) {
+      searchBtn.addEventListener("click", function () {
+        setSearch(true);
+        if (typeof setNav === "function") setNav(false);
+        box.focus();
+      });
+    }
+
+    if (searchX) {
+      searchX.addEventListener("click", function () {
+        box.value = "";
+        run("");
+        setSearch(false);
+        if (searchBtn) searchBtn.focus();
+      });
+    }
+
+    // Tapping the page outside the bar ends the search rather than leaving an
+    // expanded field covering the brand.
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest(".topbar-in")) setSearch(false);
+    });
+
+    // Leaving the collapsed breakpoint must not strand the overlay state.
+    window.matchMedia("(min-width: 621px)").addEventListener("change", function (ev) {
+      if (ev.matches) setSearch(false);
     });
   }
 
@@ -259,6 +302,7 @@
       var open = !isOpen();
       setNav(open);
       if (open) {
+        setSearch(false);
         var first = navPanel.querySelector("a");
         if (first) first.focus();
       }
