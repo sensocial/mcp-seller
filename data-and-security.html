@@ -135,16 +135,22 @@ campaign exists.</p>
 
 <h2 id="read-only-unless-you-say-otherwise">Read-only unless you say otherwise</h2>
 
-<p>26 of 28 tools cannot change anything. The two that can are:</p>
+<p>33 of 48 tools cannot change anything. The 15 that can:</p>
 
 <ul>
-<li><strong>Set campaign status</strong> — active ↔ inactive</li>
-<li><strong>Create or update a blog post</strong> — publishes to your public storefront</li>
+<li><strong>Campaigns</strong> — create custom, all-over-print, regular and express campaigns (and express
+templates), switch campaigns active ↔ inactive, take campaigns off a collection or store</li>
+<li><strong>Orders</strong> — place a fulfillment order, upload a print file for an order line waiting for a
+design, approve an order’s designs (may charge extra print cost to your SenPrints balance)</li>
+<li><strong>Artwork</strong> — start and confirm an upload to your own media library</li>
+<li><strong>Stores</strong> — create a store, attach a custom domain you own</li>
+<li><strong>Blog</strong> — create or update a post, which publishes to your public storefront</li>
 </ul>
 
-<p>Without confirmation, both tools return a preview of the proposed change. They apply a change
-only when confirmation is set. Both are marked <code>destructiveHint</code> in the protocol, so a
-compliant client prompts before applying a change. Neither tool can delete data.</p>
+<p>Without confirmation, every write tool returns a preview of the proposed change. It applies
+the change only when confirmation is set. All are marked <code>readOnlyHint: false</code>, and the seven
+that change or replace something already there are also marked <code>destructiveHint</code>, so a
+compliant client prompts before applying them. No tool deletes data.</p>
 
 <p>The server checks for confirmation but does not enforce a separate human confirmation round
 trip. If your AI client is configured to approve tool calls automatically, it can submit
@@ -178,7 +184,9 @@ buyer’s internal platform trust status is never returned.</p>
 
 <ul>
 <li>Reach another seller’s data, or any platform-wide or staff-only view.</li>
-<li>Move money: no payout requests, no transfers, no payment-method changes.</li>
+<li>Move money: no payout requests, no transfers, no payment-method changes. Approving an
+order’s designs can charge its extra print cost to your SenPrints balance, as on the
+dashboard; a fulfillment order is paid for in the dashboard, not by the connector.</li>
 <li>Delete orders, campaigns, customers or stores.</li>
 <li>Read your AI chat history, files or other client-side data. The connector responds to tool
 calls and does not collect data from the client.</li>

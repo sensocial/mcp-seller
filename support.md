@@ -26,8 +26,9 @@ Manual tokens last 90 days. Generate a new one at **Settings → MCP**. Note tha
 sixth token automatically revokes the oldest.
 
 **"It changed something I didn't approve."**
-Both write tools return a preview by default and apply only when confirmation is set. They are
-marked `destructiveHint`, so a compliant client prompts before applying a change. The server
+Every write tool returns a preview by default and applies only when confirmation is set. Write
+tools are marked `readOnlyHint: false` (and `destructiveHint` where they change something
+already there), so a compliant client prompts before applying a change. The server
 does not require a human second round trip: if your AI client approves tool calls
 automatically, it can submit confirmation on the first call without prompting you. Disable
 automatic approval for this connector if you want the client to show each proposed write. If
@@ -62,4 +63,4 @@ been exposed, revoke it at **Settings → MCP** before contacting support.
 - Seller-center variant: `https://api.senprints.com/mcp/seller-custom`
 - Transport: streamable HTTP
 - Auth: OAuth 2.1, PKCE S256, dynamic client registration
-- 28 tools — 26 read, 2 write
+- 48 tools — 33 read, 15 write

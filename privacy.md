@@ -30,9 +30,13 @@ Only data belonging to your own seller account:
 |---|---|
 | Sales and analytics | Order counts, revenue, profit, visits, funnel events, by day / country / device / store / ad campaign |
 | Orders | Order records and line items, statuses, and the buyer name, email, phone and address attached to them |
+| Abandoned carts | Unpaid orders with the buyer contact details entered at checkout, and which recovery messages were sent |
+| Storefront visit log | For one of your orders, the storefront pages viewed and elements clicked in the session that ended in it |
 | Customers | Buyers who purchased from your stores: name, email, phone, country, city, state, and their order count and spend **with your stores** |
 | Campaigns | Your campaign records, including pricing and cost fields |
-| Stores | Your storefront records |
+| Stores | Your storefront records and custom domains |
+| Team | Members of your seller team: name, email, role and store access |
+| Media | Artwork and mockup files in your media library, including files you upload through the connector |
 | Billing | Transactions, payouts, refunds, topups, balance |
 | Blog | Your storefront blog posts and categories |
 

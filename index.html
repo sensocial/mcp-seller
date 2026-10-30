@@ -157,13 +157,15 @@ if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)
 
 <p>The connector links your SenPrints seller account to Claude, ChatGPT, Cursor, or another AI
 client that supports the Model Context Protocol (MCP). Once connected, the assistant can read
-your sales, orders, customers, campaigns, payouts and billing. It can also publish blog posts
-to your storefront when instructed.</p>
+your sales, orders, customers, campaigns, stores, payouts and billing. When you ask it to, it
+can also create campaigns and stores, place fulfillment orders, handle order designs and
+publish blog posts.</p>
 
 <blockquote>
-<p><strong>Of the 28 tools, 26 are read-only.</strong> The two write tools return a preview by
+<p><strong>Of the 48 tools, 33 are read-only.</strong> The 15 write tools return a preview by
 default and apply a change only when confirmation is set. They are marked
-<code>destructiveHint</code>, so a compliant client prompts before applying a change. The server
+<code>readOnlyHint: false</code>, and the ones that change something already there are also marked
+<code>destructiveHint</code>, so a compliant client prompts before applying them. The server
 does not require a separate human round trip: a client configured for automatic approval can
 submit confirmation on its first call. See <a href="data-and-security">Data &amp; security</a>.</p>
 </blockquote>
@@ -173,7 +175,7 @@ submit confirmation on its first call. See <a href="data-and-security">Data &amp
 <div class="cards">
   <a class="card" href="/connect"><span class="t"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v3a6 6 0 0 1-12 0V8Z"/></svg>Connect in 3 steps</span><span class="d">Link your account to Claude, ChatGPT or Cursor</span></a>
   <a class="card" href="/what-you-can-ask"><span class="t"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>What you can ask</span><span class="d">Example questions that work well</span></a>
-  <a class="card" href="/tool-reference"><span class="t"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>Tool reference</span><span class="d">All 28 tools, what each one reads or writes</span></a>
+  <a class="card" href="/tool-reference"><span class="t"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>Tool reference</span><span class="d">All 48 tools, what each one reads or writes</span></a>
   <a class="card" href="/data-and-security"><span class="t"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1 1 0 0 1 1.52 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1Z"/></svg>Data &amp; security</span><span class="d">What the assistant can see, and what it cannot</span></a>
   <a class="card" href="/privacy"><span class="t"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h6"/></svg>Privacy</span><span class="d">What leaves SenPrints, where it goes, how long we keep it</span></a>
   <a class="card" href="/support"><span class="t"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>Support</span><span class="d">When something does not work</span></a>
@@ -193,11 +195,13 @@ connection cannot access another seller’s data.</p>
 
 <ul>
 <li><strong>Not an admin tool.</strong> It cannot see other sellers, platform totals, or anything staff-only.</li>
-<li><strong>Not a bulk editor.</strong> Of 28 tools, 26 are read-only. The two write tools publish a blog post
-or switch campaigns between active and inactive. They preview by default and apply only when
-confirmation is set; automatic client approval can provide confirmation on the first call.</li>
+<li><strong>Not unattended.</strong> Every write previews by default and applies only when confirmation is
+set; automatic client approval can provide confirmation on the first call. No tool deletes an
+order, campaign, customer or store.</li>
 <li><strong>Not a payments tool.</strong> It can tell you what your balance and payouts look like. It cannot
-move money, request a payout, or change a payment method.</li>
+request a payout, transfer money, or change a payment method. The only charge a tool can
+cause is the extra print cost when you approve an order’s designs, taken from your SenPrints
+balance as on the dashboard.</li>
 </ul>
 
 <h2 id="requirements">Requirements</h2>

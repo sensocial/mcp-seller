@@ -171,6 +171,24 @@ average order value (AOV), visits and funnel steps between a visit and a paid or
 <li><em>“Show me campaign ‘summer-tee’.”</em></li>
 <li><em>“Deactivate these three campaigns.”</em> — previews the change by default and applies it when
 confirmation is set</li>
+<li><em>“Create a regular campaign with this design on a hoodie and a mug in my main store.”</em></li>
+<li><em>“Take these campaigns off the Summer collection.”</em></li>
+</ul>
+
+<h2 id="orders-and-fulfillment">Orders and fulfillment</h2>
+
+<ul>
+<li><em>“Which orders are waiting for a design?”</em></li>
+<li><em>“Upload this print file for that order and approve it.”</em></li>
+<li><em>“What would it cost to fulfill a black hoodie, size L, to Germany?”</em></li>
+<li><em>“Place a fulfillment order for this design to this address.”</em></li>
+</ul>
+
+<h2 id="stores">Stores</h2>
+
+<ul>
+<li><em>“Create a new store on the sub-domain mybrand.”</em></li>
+<li><em>“Connect shop.example.com to it, and tell me the DNS record to add.”</em></li>
 </ul>
 
 <h2 id="storefront-blog">Storefront blog</h2>
@@ -182,8 +200,9 @@ confirmation is set</li>
 set</li>
 </ul>
 
-<p>Both write tools are marked <code>destructiveHint</code>. A compliant client prompts before applying a
-change, but the server does not require a separate human confirmation round trip. A client
+<p>Every write tool previews first, and the ones that change something already there are marked
+<code>destructiveHint</code>. A compliant client prompts before applying a change, but the server does
+not require a separate human confirmation round trip. A client
 configured for automatic approval can submit confirmation on its first call.</p>
 
 <hr>
@@ -209,10 +228,10 @@ wrong account.</p>
 
 <ul>
 <li>Show you another seller’s data, platform totals, or anything staff-only.</li>
-<li>Move money, request a payout, or change a payment method.</li>
+<li>Request a payout, transfer money, or change a payment method.</li>
 <li>Apply a write without confirmation set. Without confirmation, the tool returns a preview.
 With automatic client approval, confirmation can be supplied on the first call.</li>
-<li>Delete a campaign or an order. It can only switch campaigns between active and inactive.</li>
+<li>Delete a campaign, an order, a customer or a store.</li>
 </ul>
 </main>
 

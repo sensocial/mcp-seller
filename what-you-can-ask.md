@@ -44,6 +44,20 @@ average order value (AOV), visits and funnel steps between a visit and a paid or
 - *"Show me campaign 'summer-tee'."*
 - *"Deactivate these three campaigns."* — previews the change by default and applies it when
   confirmation is set
+- *"Create a regular campaign with this design on a hoodie and a mug in my main store."*
+- *"Take these campaigns off the Summer collection."*
+
+## Orders and fulfillment
+
+- *"Which orders are waiting for a design?"*
+- *"Upload this print file for that order and approve it."*
+- *"What would it cost to fulfill a black hoodie, size L, to Germany?"*
+- *"Place a fulfillment order for this design to this address."*
+
+## Stores
+
+- *"Create a new store on the sub-domain mybrand."*
+- *"Connect shop.example.com to it, and tell me the DNS record to add."*
 
 ## Storefront blog
 
@@ -52,8 +66,9 @@ average order value (AOV), visits and funnel steps between a visit and a paid or
   — previews the target, state, slug and body size by default, then saves when confirmation is
   set
 
-Both write tools are marked `destructiveHint`. A compliant client prompts before applying a
-change, but the server does not require a separate human confirmation round trip. A client
+Every write tool previews first, and the ones that change something already there are marked
+`destructiveHint`. A compliant client prompts before applying a change, but the server does
+not require a separate human confirmation round trip. A client
 configured for automatic approval can submit confirmation on its first call.
 
 ---
@@ -78,7 +93,7 @@ wrong account.
 ## What it will not do
 
 - Show you another seller's data, platform totals, or anything staff-only.
-- Move money, request a payout, or change a payment method.
+- Request a payout, transfer money, or change a payment method.
 - Apply a write without confirmation set. Without confirmation, the tool returns a preview.
   With automatic client approval, confirmation can be supplied on the first call.
-- Delete a campaign or an order. It can only switch campaigns between active and inactive.
+- Delete a campaign, an order, a customer or a store.

@@ -17,14 +17,20 @@ campaign exists.
 
 ## Read-only unless you say otherwise
 
-26 of 28 tools cannot change anything. The two that can are:
+33 of 48 tools cannot change anything. The 15 that can:
 
-- **Set campaign status** — active ↔ inactive
-- **Create or update a blog post** — publishes to your public storefront
+- **Campaigns** — create custom, all-over-print, regular and express campaigns (and express
+  templates), switch campaigns active ↔ inactive, take campaigns off a collection or store
+- **Orders** — place a fulfillment order, upload a print file for an order line waiting for a
+  design, approve an order's designs (may charge extra print cost to your SenPrints balance)
+- **Artwork** — start and confirm an upload to your own media library
+- **Stores** — create a store, attach a custom domain you own
+- **Blog** — create or update a post, which publishes to your public storefront
 
-Without confirmation, both tools return a preview of the proposed change. They apply a change
-only when confirmation is set. Both are marked `destructiveHint` in the protocol, so a
-compliant client prompts before applying a change. Neither tool can delete data.
+Without confirmation, every write tool returns a preview of the proposed change. It applies
+the change only when confirmation is set. All are marked `readOnlyHint: false`, and the seven
+that change or replace something already there are also marked `destructiveHint`, so a
+compliant client prompts before applying them. No tool deletes data.
 
 The server checks for confirmation but does not enforce a separate human confirmation round
 trip. If your AI client is configured to approve tool calls automatically, it can submit
@@ -52,7 +58,9 @@ buyer's internal platform trust status is never returned.
 ## What the connector cannot do
 
 - Reach another seller's data, or any platform-wide or staff-only view.
-- Move money: no payout requests, no transfers, no payment-method changes.
+- Move money: no payout requests, no transfers, no payment-method changes. Approving an
+  order's designs can charge its extra print cost to your SenPrints balance, as on the
+  dashboard; a fulfillment order is paid for in the dashboard, not by the connector.
 - Delete orders, campaigns, customers or stores.
 - Read your AI chat history, files or other client-side data. The connector responds to tool
   calls and does not collect data from the client.

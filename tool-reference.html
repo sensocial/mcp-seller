@@ -4,17 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tool reference — SenPrints Seller Connector</title>
-<meta name="description" content="All 28 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
+<meta name="description" content="All 48 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
 <link rel="canonical" href="https://mcp.senprints.com/tool-reference">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SenPrints Seller Connector">
 <meta property="og:title" content="Tool reference — SenPrints Seller Connector">
-<meta property="og:description" content="All 28 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
+<meta property="og:description" content="All 48 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
 <meta property="og:url" content="https://mcp.senprints.com/tool-reference">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tool reference — SenPrints Seller Connector">
-<meta name="twitter:description" content="All 28 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
+<meta name="twitter:description" content="All 48 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
 
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
@@ -50,7 +50,7 @@ if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)
     {
       "@type": "TechArticle",
       "headline": "Tool reference",
-      "description": "All 28 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.",
+      "description": "All 48 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.",
       "url": "https://mcp.senprints.com/tool-reference",
       "isPartOf": {
         "@type": "WebSite",
@@ -118,34 +118,32 @@ if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)
 <main class="content" id="main">
 <h1>Tool reference</h1>
 
-<p>The connector provides 28 tools: <strong>26 are read-only and 2 can write. Both write tools return a
-preview by default and apply a change only when confirmation is set.</strong></p>
+<p>The connector provides 48 tools: <strong>33 are read-only and 15 can write. Every write tool returns a
+preview by default and applies a change only when confirmation is set.</strong></p>
 
 <p>Read-only tools are marked <code>readOnlyHint</code> in the protocol, so a compliant client can run them
-without prompting. The two write tools are marked <code>destructiveHint</code>, so a compliant client
-prompts before applying a change. The server does not enforce a separate human confirmation
-round trip; a client configured for automatic approval can send confirmation on its first
-call.</p>
+without prompting. Write tools are marked <code>readOnlyHint: false</code>; the seven that change or
+replace something already there (campaign status, store listings, order designs, a fulfillment
+order, a custom domain, a blog post) are also marked <code>destructiveHint</code>, so a compliant client
+prompts before applying them. The server does not enforce a separate human confirmation round
+trip; a client configured for automatic approval can send confirmation on its first call.</p>
 
 <p>Every tool is filtered server-side to the seller account authorised for the connection.
 References to “your” data below mean data filtered by the backend, not by the assistant.</p>
 
 <hr>
 
-<h2 id="sales-analytics-8-tools-all-read">Sales &amp; analytics — 8 tools, all read</h2>
+<h2 id="sales-analytics-5-tools-all-read">Sales &amp; analytics — 5 tools, all read</h2>
 
 <div class="tablewrap">
 <table>
 <thead><tr><th>Tool</th><th>What it returns</th></tr></thead>
 <tbody>
-<tr><td>Sales overview</td><td>Headline KPIs for a window: paid orders, items, sales, profit, AOV, visits, funnel events, refunds, plus live balance</td></tr>
+<tr><td>Sales overview</td><td>Headline KPIs for a window: paid orders, items, sales, profit, AOV, visits, funnel events, refunds, plus live balance; optionally compared with the window before it</td></tr>
 <tr><td>Sales chart</td><td>Daily time series for sales, visits and each funnel step</td></tr>
-<tr><td>Compare sales periods</td><td>The same KPIs for a window <em>and</em> the one before it — this week vs last week, this month vs last month</td></tr>
-<tr><td>Sales by country</td><td>Sales, orders and profit per buyer country, biggest first</td></tr>
-<tr><td>Sales by device</td><td>Sales, orders and visits per device type</td></tr>
-<tr><td>Sales by store</td><td>Sales, orders, profit and visits per store you own</td></tr>
-<tr><td>Top products</td><td>Best-selling template products with items sold, sales and profit</td></tr>
-<tr><td>Ads breakdown</td><td>Sales, orders and profit attributed to ads, grouped by campaign, source, medium or content</td></tr>
+<tr><td>Sales breakdown</td><td>Sales, orders and profit split by one dimension: country, device, store, product, or ads campaign, source or medium</td></tr>
+<tr><td>Campaign sales</td><td>Your best-selling campaigns for a window, and totals for every campaign whose title contains a keyword</td></tr>
+<tr><td>Contest SenPoints</td><td>Your points in the latest SenPrints contest, its reward tiers and how far the next tier is</td></tr>
 </tbody>
 </table>
 </div>
@@ -156,18 +154,68 @@ rows are combined in an anonymous <strong>“Other”</strong> bucket. Your figu
 other party’s store identity is not returned.</p>
 </blockquote>
 
-<h2 id="orders-3-tools-all-read">Orders — 3 tools, all read</h2>
+<h2 id="orders-9-tools-3-write">Orders — 9 tools, 3 write</h2>
 
 <div class="tablewrap">
 <table>
-<thead><tr><th>Tool</th><th>What it returns</th></tr></thead>
+<thead><tr><th>Tool</th><th>What it does</th></tr></thead>
 <tbody>
-<tr><td>Search orders</td><td>Your orders, filtered by status, payment status, fulfilment status, customer email, order number or date range</td></tr>
+<tr><td>Search orders</td><td>Your store orders or fulfillment orders, filtered by status, payment, fulfilment, customer email, order number, store, campaign or date</td></tr>
 <tr><td>Get order</td><td>One order by id or order number, with its line items</td></tr>
+<tr><td>Get order visit log</td><td>The storefront journey that ended in one of your orders: pages viewed, clicks, where the session stopped</td></tr>
 <tr><td>Search cancel requests</td><td>Cancel requests on your orders</td></tr>
+<tr><td>Search abandoned orders</td><td>Unpaid carts, with what the buyer was about to pay and which recovery messages were sent</td></tr>
+<tr><td>Search orders waiting for a design</td><td>Orders whose lines wait in <code>designing</code> because a custom campaign launched without print files</td></tr>
+<tr class="w"><td><strong>Upload a design for an order line</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Sets the print file for one print space of a waiting line; it also applies to later orders of that product</td></tr>
+<tr class="w"><td><strong>Approve the designs of an order</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Releases a waiting order to fulfilment. A product printed on more than one print space is charged its extra print cost to your SenPrints balance</td></tr>
+<tr class="w"><td><strong>Create fulfillment order</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Places one fulfillment order that SenPrints prints and ships to the address given. Payment for it happens in the seller dashboard</td></tr>
 </tbody>
 </table>
 </div>
+
+<p>The fulfillment-order preview resolves each line against the catalog and reports the variant,
+an indicative base cost, and every blocking error or warning before anything is created.</p>
+
+<h2 id="artwork-catalog-6-tools-2-write">Artwork &amp; catalog — 6 tools, 2 write</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Tool</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td>Search the SenPrints product catalog</td><td>Products you can sell or fulfill, by product type or name, with their lowest base cost</td></tr>
+<tr><td>Read one SenPrints catalog product</td><td>Base cost per region and variant, shipping cost and time, print file sizes and print spaces</td></tr>
+<tr><td>List campaign templates</td><td>Blank products a campaign can be sold on, with print spaces and the accepted price range</td></tr>
+<tr><td>Search fulfillment media</td><td>Artwork and mockups already in your media library</td></tr>
+<tr class="w"><td><strong>Start an artwork upload</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Reserves a path in your storage and returns a 30-minute upload link, so the file never passes through the chat</td></tr>
+<tr class="w"><td><strong>Confirm an artwork upload</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Checks the uploaded file arrived and is fit to print, then adds it to your media library</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="campaigns-9-tools-7-write">Campaigns — 9 tools, 7 write</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Tool</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td>Search campaigns</td><td>Your campaigns, filtered by status, keyword, store, type or created date</td></tr>
+<tr><td>Get campaign</td><td>One campaign by id or slug, including its pricing and cost fields</td></tr>
+<tr class="w"><td><strong>Set campaign status</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Switches campaigns between active and inactive</td></tr>
+<tr class="w"><td><strong>Take campaigns off a collection or store</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Removes the listing links; the campaigns stay active and keep their URL</td></tr>
+<tr class="w"><td><strong>Create custom campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 campaigns per call from your own mockup photos</td></tr>
+<tr class="w"><td><strong>Create all-over-print campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 campaigns per call, one design printed over the whole product</td></tr>
+<tr class="w"><td><strong>Create regular campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 campaigns per call, print designs placed on products the way the dashboard editor places them</td></tr>
+<tr class="w"><td><strong>Create an express template</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> The product set (templates, prices, colors) that express campaigns sell</td></tr>
+<tr class="w"><td><strong>Create express campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 campaigns per call from one express template, one design each</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Without confirmation, every campaign write returns a preview listing exactly what would be
+created or changed, and anything refused because it does not belong to you or fails a check
+(price range, print size, trademark). Batch creation sends the preview’s hash back on
+confirmation, so a confirmed call cannot create something different from what was previewed.
+No tool deletes a campaign or changes campaigns in draft, reviewing or blocked states.</p>
 
 <h2 id="customers-1-tool-read">Customers — 1 tool, read</h2>
 
@@ -175,7 +223,7 @@ other party’s store identity is not returned.</p>
 <table>
 <thead><tr><th>Tool</th><th>What it returns</th></tr></thead>
 <tbody>
-<tr><td>Search customers</td><td>Buyers who purchased from your stores, by exact email or name substring</td></tr>
+<tr><td>Search customers</td><td>Buyers who purchased from your stores, by name or email, store, country or order count</td></tr>
 </tbody>
 </table>
 </div>
@@ -185,49 +233,32 @@ phone, country, city, state, store, and the number and value of orders placed <s
 Buyer credentials, payment-processor IDs and platform-wide totals are never returned. See
 <a href="data-and-security">Data &amp; security</a>.</p>
 
-<h2 id="campaigns-3-tools-1-writes">Campaigns — 3 tools, 1 writes</h2>
+<h2 id="stores-team-6-tools-2-write">Stores &amp; team — 6 tools, 2 write</h2>
 
 <div class="tablewrap">
 <table>
 <thead><tr><th>Tool</th><th>What it does</th></tr></thead>
 <tbody>
-<tr><td>Search campaigns</td><td>Your campaigns, filtered by status, slug or created date</td></tr>
-<tr><td>Get campaign</td><td>One campaign by id or slug, including its pricing and cost fields</td></tr>
-<tr class="w"><td><strong>Set campaign status</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Switches campaigns between active and inactive</td></tr>
-</tbody>
-</table>
-</div>
-
-<p>Without confirmation, <strong>Set campaign status</strong> returns a preview showing which campaigns would
-change, their current and proposed states, and any campaigns it refuses because they do not
-belong to you or are blocked by the platform. It applies the change only when confirmation is
-set. A compliant client prompts before applying, but automatic approval can submit
-confirmation on the first call. The tool cannot delete a campaign or change campaigns in
-draft, reviewing or blocked states.</p>
-
-<h2 id="stores-2-tools-all-read">Stores — 2 tools, all read</h2>
-
-<div class="tablewrap">
-<table>
-<thead><tr><th>Tool</th><th>What it returns</th></tr></thead>
-<tbody>
 <tr><td>Search stores</td><td>Your stores, by keyword or status</td></tr>
 <tr><td>Get store</td><td>One store by id, domain or sub-domain</td></tr>
+<tr><td>List store custom domains</td><td>The custom domains on your stores and their activation state</td></tr>
+<tr><td>Search team members</td><td>Members of your seller team, their role and which stores they may work on (account owner only)</td></tr>
+<tr class="w"><td><strong>Create a store</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Opens a new storefront on a SenPrints sub-domain</td></tr>
+<tr class="w"><td><strong>Add a custom domain to a store</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Attaches a domain you own and returns the DNS record to add; at most 5 per account per 24 hours</td></tr>
 </tbody>
 </table>
 </div>
 
 <p>Marketplace connection tokens are never included, and webhook URLs are removed.</p>
 
-<h2 id="money-6-tools-all-read">Money — 6 tools, all read</h2>
+<h2 id="money-5-tools-all-read">Money — 5 tools, all read</h2>
 
 <div class="tablewrap">
 <table>
 <thead><tr><th>Tool</th><th>What it returns</th></tr></thead>
 <tbody>
-<tr><td>Balance summary</td><td>Billing totals grouped by type and status, plus a payout breakdown</td></tr>
-<tr><td>Search transactions</td><td>Sales, commissions, payouts, fees, refunds and topups</td></tr>
-<tr><td>Search payouts</td><td>Your payout queue and history</td></tr>
+<tr><td>Balance summary</td><td>Your current balance, billing totals grouped by type and status, plus a payout breakdown</td></tr>
+<tr><td>Search transactions</td><td>Sales, commissions, payouts, fees, refunds and topups, including your payout history</td></tr>
 <tr><td>Get payout</td><td>One payout by id</td></tr>
 <tr><td>Search refunds</td><td>Payment-gateway refunds on your orders</td></tr>
 <tr><td>Search topups</td><td>Your topup transactions</td></tr>
@@ -238,8 +269,9 @@ draft, reviewing or blocked states.</p>
 <p>Amounts are in USD, the platform settlement currency. Gateway response traces, payout
 signatures and raw topup payloads are removed before a response is returned.</p>
 
-<p>These tools cannot move money. The connector has no tool to request a payout or change a
-payment method.</p>
+<p>No tool requests a payout, transfers money or changes a payment method. The only charge a tool
+can cause is the extra print cost of a multi-print-space product when you approve an order’s
+designs, deducted from your SenPrints balance as it is on the dashboard.</p>
 
 <h2 id="blog-seo-4-tools-1-writes">Blog &amp; SEO — 4 tools, 1 writes</h2>
 
@@ -256,11 +288,21 @@ payment method.</p>
 </div>
 
 <p>Without confirmation, <strong>Create or update a blog post</strong> previews whether it would create or
-update a post, the resolved URL slug, target store, published state and body size. The preview
-reports the body size, not the full body content. The tool saves only when confirmation is set;
-automatic client approval can submit confirmation on the first call. On update, it retains the
-existing slug unless you provide a new one. All HTML is sanitised when saved, so scripts and
-event handlers are removed from submitted content.</p>
+update a post, the resolved URL slug, target store, published state and body size. On update,
+it retains the existing slug unless you provide a new one. All HTML is sanitised when saved,
+so scripts and event handlers are removed from submitted content.</p>
+
+<h2 id="help-center-2-tools-all-read">Help center — 2 tools, all read</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Tool</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td>Search SenPrints guides</td><td>Help center guides, seller policies and announcements matching your keywords</td></tr>
+<tr><td>Read a SenPrints guide</td><td>One article in full, with its link</td></tr>
+</tbody>
+</table>
+</div>
 
 <h2 id="account-1-tool-read">Account — 1 tool, read</h2>
 

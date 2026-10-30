@@ -1,6 +1,6 @@
 # SenPrints Seller Connector
 
-> A remote Model Context Protocol (MCP) server, operated by SenPrints, that lets a seller's AI assistant read their own SenPrints print-on-demand account — sales, orders, customers, campaigns, payouts and billing — and publish storefront blog posts when instructed. 28 tools: 26 read-only, 2 write.
+> A remote Model Context Protocol (MCP) server, operated by SenPrints, that lets a seller's AI assistant read their own SenPrints print-on-demand account — sales, orders, customers, campaigns, stores, payouts and billing — and, when instructed, create campaigns and stores, place fulfillment orders, handle order designs and publish storefront blog posts. 48 tools: 33 read-only, 15 write, every write previewed first.
 
 - Endpoint: https://api.senprints.com/mcp/seller (streamable HTTP, OAuth 2.1 with dynamic client registration)
 - Audience: SenPrints sellers using Claude, ChatGPT, Cursor or another MCP client
@@ -20,13 +20,15 @@ connector answers with data from your SenPrints seller account.
 
 The connector links your SenPrints seller account to Claude, ChatGPT, Cursor, or another AI
 client that supports the Model Context Protocol (MCP). Once connected, the assistant can read
-your sales, orders, customers, campaigns, payouts and billing. It can also publish blog posts
-to your storefront when instructed.
+your sales, orders, customers, campaigns, stores, payouts and billing. When you ask it to, it
+can also create campaigns and stores, place fulfillment orders, handle order designs and
+publish blog posts.
 
-**Of the 28 tools, 26 are read-only. The two write tools return a preview by default and apply
-a change only when confirmation is set. They are marked `destructiveHint`, so a compliant
-client prompts before applying a change. The server does not require a separate human round
-trip: a client configured for automatic approval can submit confirmation on its first call.**
+**Of the 48 tools, 33 are read-only. The 15 write tools return a preview by default and apply
+a change only when confirmation is set. They are marked `readOnlyHint: false`, and the ones
+that change something already there are also marked `destructiveHint`, so a compliant client
+prompts before applying them. The server does not require a separate human round trip: a
+client configured for automatic approval can submit confirmation on its first call.**
 See [Data & security](/data-and-security).
 
 ---
@@ -37,7 +39,7 @@ See [Data & security](/data-and-security).
 |---|---|
 | [Connect in 3 steps](/connect) | Link your account to Claude, ChatGPT or Cursor |
 | [What you can ask](/what-you-can-ask) | Example questions that work well |
-| [Tool reference](/tool-reference) | All 28 tools, what each one reads or writes |
+| [Tool reference](/tool-reference) | All 48 tools, what each one reads or writes |
 | [Data & security](/data-and-security) | What the assistant can see, and what it cannot |
 | [Privacy](/privacy) | What leaves SenPrints, where it goes, how long we keep it |
 | [Support](/support) | When something does not work |
@@ -57,11 +59,13 @@ connection cannot access another seller's data.
 ## What it is not
 
 - **Not an admin tool.** It cannot see other sellers, platform totals, or anything staff-only.
-- **Not a bulk editor.** Of 28 tools, 26 are read-only. The two write tools publish a blog post
-  or switch campaigns between active and inactive. They preview by default and apply only when
-  confirmation is set; automatic client approval can provide confirmation on the first call.
+- **Not unattended.** Every write previews by default and applies only when confirmation is
+  set; automatic client approval can provide confirmation on the first call. No tool deletes an
+  order, campaign, customer or store.
 - **Not a payments tool.** It can tell you what your balance and payouts look like. It cannot
-  move money, request a payout, or change a payment method.
+  request a payout, transfer money, or change a payment method. The only charge a tool can
+  cause is the extra print cost when you approve an order's designs, taken from your SenPrints
+  balance as on the dashboard.
 
 ## Requirements
 
@@ -208,6 +212,20 @@ average order value (AOV), visits and funnel steps between a visit and a paid or
 - *"Show me campaign 'summer-tee'."*
 - *"Deactivate these three campaigns."* — previews the change by default and applies it when
   confirmation is set
+- *"Create a regular campaign with this design on a hoodie and a mug in my main store."*
+- *"Take these campaigns off the Summer collection."*
+
+## Orders and fulfillment
+
+- *"Which orders are waiting for a design?"*
+- *"Upload this print file for that order and approve it."*
+- *"What would it cost to fulfill a black hoodie, size L, to Germany?"*
+- *"Place a fulfillment order for this design to this address."*
+
+## Stores
+
+- *"Create a new store on the sub-domain mybrand."*
+- *"Connect shop.example.com to it, and tell me the DNS record to add."*
 
 ## Storefront blog
 
@@ -216,8 +234,9 @@ average order value (AOV), visits and funnel steps between a visit and a paid or
   — previews the target, state, slug and body size by default, then saves when confirmation is
   set
 
-Both write tools are marked `destructiveHint`. A compliant client prompts before applying a
-change, but the server does not require a separate human confirmation round trip. A client
+Every write tool previews first, and the ones that change something already there are marked
+`destructiveHint`. A compliant client prompts before applying a change, but the server does
+not require a separate human confirmation round trip. A client
 configured for automatic approval can submit confirmation on its first call.
 
 ---
@@ -242,96 +261,122 @@ wrong account.
 ## What it will not do
 
 - Show you another seller's data, platform totals, or anything staff-only.
-- Move money, request a payout, or change a payment method.
+- Request a payout, transfer money, or change a payment method.
 - Apply a write without confirmation set. Without confirmation, the tool returns a preview.
   With automatic client approval, confirmation can be supplied on the first call.
-- Delete a campaign or an order. It can only switch campaigns between active and inactive.
+- Delete a campaign, an order, a customer or a store.
 
 ---
 
 # Tool reference
 
-The connector provides 28 tools: **26 are read-only and 2 can write. Both write tools return a
-preview by default and apply a change only when confirmation is set.**
+The connector provides 48 tools: **33 are read-only and 15 can write. Every write tool returns a
+preview by default and applies a change only when confirmation is set.**
 
 Read-only tools are marked `readOnlyHint` in the protocol, so a compliant client can run them
-without prompting. The two write tools are marked `destructiveHint`, so a compliant client
-prompts before applying a change. The server does not enforce a separate human confirmation
-round trip; a client configured for automatic approval can send confirmation on its first
-call.
+without prompting. Write tools are marked `readOnlyHint: false`; the seven that change or
+replace something already there (campaign status, store listings, order designs, a fulfillment
+order, a custom domain, a blog post) are also marked `destructiveHint`, so a compliant client
+prompts before applying them. The server does not enforce a separate human confirmation round
+trip; a client configured for automatic approval can send confirmation on its first call.
 
 Every tool is filtered server-side to the seller account authorised for the connection.
 References to "your" data below mean data filtered by the backend, not by the assistant.
 
 ---
 
-## Sales & analytics — 8 tools, all read
+## Sales & analytics — 5 tools, all read
 
 | Tool | What it returns |
 |---|---|
-| Sales overview | Headline KPIs for a window: paid orders, items, sales, profit, AOV, visits, funnel events, refunds, plus live balance |
+| Sales overview | Headline KPIs for a window: paid orders, items, sales, profit, AOV, visits, funnel events, refunds, plus live balance; optionally compared with the window before it |
 | Sales chart | Daily time series for sales, visits and each funnel step |
-| Compare sales periods | The same KPIs for a window *and* the one before it — this week vs last week, this month vs last month |
-| Sales by country | Sales, orders and profit per buyer country, biggest first |
-| Sales by device | Sales, orders and visits per device type |
-| Sales by store | Sales, orders, profit and visits per store you own |
-| Top products | Best-selling template products with items sold, sales and profit |
-| Ads breakdown | Sales, orders and profit attributed to ads, grouped by campaign, source, medium or content |
+| Sales breakdown | Sales, orders and profit split by one dimension: country, device, store, product, or ads campaign, source or medium |
+| Campaign sales | Your best-selling campaigns for a window, and totals for every campaign whose title contains a keyword |
+| Contest SenPoints | Your points in the latest SenPrints contest, its reward tiers and how far the next tier is |
 
 > Your campaigns can be cross-listed on the marketplace and on stores you do not own. Those
 > rows are combined in an anonymous **"Other"** bucket. Your figures are included, but the
 > other party's store identity is not returned.
 
-## Orders — 3 tools, all read
+## Orders — 9 tools, 3 write
 
-| Tool | What it returns |
+| Tool | What it does |
 |---|---|
-| Search orders | Your orders, filtered by status, payment status, fulfilment status, customer email, order number or date range |
+| Search orders | Your store orders or fulfillment orders, filtered by status, payment, fulfilment, customer email, order number, store, campaign or date |
 | Get order | One order by id or order number, with its line items |
+| Get order visit log | The storefront journey that ended in one of your orders: pages viewed, clicks, where the session stopped |
 | Search cancel requests | Cancel requests on your orders |
+| Search abandoned orders | Unpaid carts, with what the buyer was about to pay and which recovery messages were sent |
+| Search orders waiting for a design | Orders whose lines wait in `designing` because a custom campaign launched without print files |
+| **Upload a design for an order line** | **Writes.** Sets the print file for one print space of a waiting line; it also applies to later orders of that product |
+| **Approve the designs of an order** | **Writes.** Releases a waiting order to fulfilment. A product printed on more than one print space is charged its extra print cost to your SenPrints balance |
+| **Create fulfillment order** | **Writes.** Places one fulfillment order that SenPrints prints and ships to the address given. Payment for it happens in the seller dashboard |
+
+The fulfillment-order preview resolves each line against the catalog and reports the variant,
+an indicative base cost, and every blocking error or warning before anything is created.
+
+## Artwork & catalog — 6 tools, 2 write
+
+| Tool | What it does |
+|---|---|
+| Search the SenPrints product catalog | Products you can sell or fulfill, by product type or name, with their lowest base cost |
+| Read one SenPrints catalog product | Base cost per region and variant, shipping cost and time, print file sizes and print spaces |
+| List campaign templates | Blank products a campaign can be sold on, with print spaces and the accepted price range |
+| Search fulfillment media | Artwork and mockups already in your media library |
+| **Start an artwork upload** | **Writes.** Reserves a path in your storage and returns a 30-minute upload link, so the file never passes through the chat |
+| **Confirm an artwork upload** | **Writes.** Checks the uploaded file arrived and is fit to print, then adds it to your media library |
+
+## Campaigns — 9 tools, 7 write
+
+| Tool | What it does |
+|---|---|
+| Search campaigns | Your campaigns, filtered by status, keyword, store, type or created date |
+| Get campaign | One campaign by id or slug, including its pricing and cost fields |
+| **Set campaign status** | **Writes.** Switches campaigns between active and inactive |
+| **Take campaigns off a collection or store** | **Writes.** Removes the listing links; the campaigns stay active and keep their URL |
+| **Create custom campaigns** | **Writes.** Up to 20 campaigns per call from your own mockup photos |
+| **Create all-over-print campaigns** | **Writes.** Up to 20 campaigns per call, one design printed over the whole product |
+| **Create regular campaigns** | **Writes.** Up to 20 campaigns per call, print designs placed on products the way the dashboard editor places them |
+| **Create an express template** | **Writes.** The product set (templates, prices, colors) that express campaigns sell |
+| **Create express campaigns** | **Writes.** Up to 20 campaigns per call from one express template, one design each |
+
+Without confirmation, every campaign write returns a preview listing exactly what would be
+created or changed, and anything refused because it does not belong to you or fails a check
+(price range, print size, trademark). Batch creation sends the preview's hash back on
+confirmation, so a confirmed call cannot create something different from what was previewed.
+No tool deletes a campaign or changes campaigns in draft, reviewing or blocked states.
 
 ## Customers — 1 tool, read
 
 | Tool | What it returns |
 |---|---|
-| Search customers | Buyers who purchased from your stores, by exact email or name substring |
+| Search customers | Buyers who purchased from your stores, by name or email, store, country or order count |
 
 This tool returns the same columns shown in the dashboard `/customers` list: name, email,
 phone, country, city, state, store, and the number and value of orders placed **with you**.
 Buyer credentials, payment-processor IDs and platform-wide totals are never returned. See
 [Data & security](/data-and-security).
 
-## Campaigns — 3 tools, 1 writes
+## Stores & team — 6 tools, 2 write
 
 | Tool | What it does |
 |---|---|
-| Search campaigns | Your campaigns, filtered by status, slug or created date |
-| Get campaign | One campaign by id or slug, including its pricing and cost fields |
-| **Set campaign status** | **Writes.** Switches campaigns between active and inactive |
-
-Without confirmation, **Set campaign status** returns a preview showing which campaigns would
-change, their current and proposed states, and any campaigns it refuses because they do not
-belong to you or are blocked by the platform. It applies the change only when confirmation is
-set. A compliant client prompts before applying, but automatic approval can submit
-confirmation on the first call. The tool cannot delete a campaign or change campaigns in
-draft, reviewing or blocked states.
-
-## Stores — 2 tools, all read
-
-| Tool | What it returns |
-|---|---|
 | Search stores | Your stores, by keyword or status |
 | Get store | One store by id, domain or sub-domain |
+| List store custom domains | The custom domains on your stores and their activation state |
+| Search team members | Members of your seller team, their role and which stores they may work on (account owner only) |
+| **Create a store** | **Writes.** Opens a new storefront on a SenPrints sub-domain |
+| **Add a custom domain to a store** | **Writes.** Attaches a domain you own and returns the DNS record to add; at most 5 per account per 24 hours |
 
 Marketplace connection tokens are never included, and webhook URLs are removed.
 
-## Money — 6 tools, all read
+## Money — 5 tools, all read
 
 | Tool | What it returns |
 |---|---|
-| Balance summary | Billing totals grouped by type and status, plus a payout breakdown |
-| Search transactions | Sales, commissions, payouts, fees, refunds and topups |
-| Search payouts | Your payout queue and history |
+| Balance summary | Your current balance, billing totals grouped by type and status, plus a payout breakdown |
+| Search transactions | Sales, commissions, payouts, fees, refunds and topups, including your payout history |
 | Get payout | One payout by id |
 | Search refunds | Payment-gateway refunds on your orders |
 | Search topups | Your topup transactions |
@@ -339,8 +384,9 @@ Marketplace connection tokens are never included, and webhook URLs are removed.
 Amounts are in USD, the platform settlement currency. Gateway response traces, payout
 signatures and raw topup payloads are removed before a response is returned.
 
-These tools cannot move money. The connector has no tool to request a payout or change a
-payment method.
+No tool requests a payout, transfers money or changes a payment method. The only charge a tool
+can cause is the extra print cost of a multi-print-space product when you approve an order's
+designs, deducted from your SenPrints balance as it is on the dashboard.
 
 ## Blog & SEO — 4 tools, 1 writes
 
@@ -352,11 +398,16 @@ payment method.
 | **Create or update a blog post** | **Writes, and publishes to your public storefront** |
 
 Without confirmation, **Create or update a blog post** previews whether it would create or
-update a post, the resolved URL slug, target store, published state and body size. The preview
-reports the body size, not the full body content. The tool saves only when confirmation is set;
-automatic client approval can submit confirmation on the first call. On update, it retains the
-existing slug unless you provide a new one. All HTML is sanitised when saved, so scripts and
-event handlers are removed from submitted content.
+update a post, the resolved URL slug, target store, published state and body size. On update,
+it retains the existing slug unless you provide a new one. All HTML is sanitised when saved,
+so scripts and event handlers are removed from submitted content.
+
+## Help center — 2 tools, all read
+
+| Tool | What it returns |
+|---|---|
+| Search SenPrints guides | Help center guides, seller policies and announcements matching your keywords |
+| Read a SenPrints guide | One article in full, with its link |
 
 ## Account — 1 tool, read
 
@@ -387,14 +438,20 @@ campaign exists.
 
 ## Read-only unless you say otherwise
 
-26 of 28 tools cannot change anything. The two that can are:
+33 of 48 tools cannot change anything. The 15 that can:
 
-- **Set campaign status** — active ↔ inactive
-- **Create or update a blog post** — publishes to your public storefront
+- **Campaigns** — create custom, all-over-print, regular and express campaigns (and express
+  templates), switch campaigns active ↔ inactive, take campaigns off a collection or store
+- **Orders** — place a fulfillment order, upload a print file for an order line waiting for a
+  design, approve an order's designs (may charge extra print cost to your SenPrints balance)
+- **Artwork** — start and confirm an upload to your own media library
+- **Stores** — create a store, attach a custom domain you own
+- **Blog** — create or update a post, which publishes to your public storefront
 
-Without confirmation, both tools return a preview of the proposed change. They apply a change
-only when confirmation is set. Both are marked `destructiveHint` in the protocol, so a
-compliant client prompts before applying a change. Neither tool can delete data.
+Without confirmation, every write tool returns a preview of the proposed change. It applies
+the change only when confirmation is set. All are marked `readOnlyHint: false`, and the seven
+that change or replace something already there are also marked `destructiveHint`, so a
+compliant client prompts before applying them. No tool deletes data.
 
 The server checks for confirmation but does not enforce a separate human confirmation round
 trip. If your AI client is configured to approve tool calls automatically, it can submit
@@ -422,7 +479,9 @@ buyer's internal platform trust status is never returned.
 ## What the connector cannot do
 
 - Reach another seller's data, or any platform-wide or staff-only view.
-- Move money: no payout requests, no transfers, no payment-method changes.
+- Move money: no payout requests, no transfers, no payment-method changes. Approving an
+  order's designs can charge its extra print cost to your SenPrints balance, as on the
+  dashboard; a fulfillment order is paid for in the dashboard, not by the connector.
 - Delete orders, campaigns, customers or stores.
 - Read your AI chat history, files or other client-side data. The connector responds to tool
   calls and does not collect data from the client.
@@ -494,9 +553,13 @@ Only data belonging to your own seller account:
 |---|---|
 | Sales and analytics | Order counts, revenue, profit, visits, funnel events, by day / country / device / store / ad campaign |
 | Orders | Order records and line items, statuses, and the buyer name, email, phone and address attached to them |
+| Abandoned carts | Unpaid orders with the buyer contact details entered at checkout, and which recovery messages were sent |
+| Storefront visit log | For one of your orders, the storefront pages viewed and elements clicked in the session that ended in it |
 | Customers | Buyers who purchased from your stores: name, email, phone, country, city, state, and their order count and spend **with your stores** |
 | Campaigns | Your campaign records, including pricing and cost fields |
-| Stores | Your storefront records |
+| Stores | Your storefront records and custom domains |
+| Team | Members of your seller team: name, email, role and store access |
+| Media | Artwork and mockup files in your media library, including files you upload through the connector |
 | Billing | Transactions, payouts, refunds, topups, balance |
 | Blog | Your storefront blog posts and categories |
 
@@ -623,8 +686,9 @@ Manual tokens last 90 days. Generate a new one at **Settings → MCP**. Note tha
 sixth token automatically revokes the oldest.
 
 **"It changed something I didn't approve."**
-Both write tools return a preview by default and apply only when confirmation is set. They are
-marked `destructiveHint`, so a compliant client prompts before applying a change. The server
+Every write tool returns a preview by default and applies only when confirmation is set. Write
+tools are marked `readOnlyHint: false` (and `destructiveHint` where they change something
+already there), so a compliant client prompts before applying a change. The server
 does not require a human second round trip: if your AI client approves tool calls
 automatically, it can submit confirmation on the first call without prompting you. Disable
 automatic approval for this connector if you want the client to show each proposed write. If
@@ -659,4 +723,4 @@ been exposed, revoke it at **Settings → MCP** before contacting support.
 - Seller-center variant: `https://api.senprints.com/mcp/seller-custom`
 - Transport: streamable HTTP
 - Auth: OAuth 2.1, PKCE S256, dynamic client registration
-- 28 tools — 26 read, 2 write
+- 48 tools — 33 read, 15 write
