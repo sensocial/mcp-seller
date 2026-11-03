@@ -17,7 +17,7 @@ stylesheet, one script and the fonts, and nothing else:
 - `index.html` — landing page
 - `connect.html` — how to connect
 - `what-you-can-ask.html` — example questions
-- `tool-reference.html` — all 48 tools
+- `tool-reference.html` — all 57 tools
 - `data-and-security.html` — what the assistant can and cannot see
 - `privacy.html` — privacy notice for the connector
 - `support.html` — troubleshooting and contacts

@@ -63,4 +63,4 @@ been exposed, revoke it at **Settings → MCP** before contacting support.
 - Seller-center variant: `https://api.senprints.com/mcp/seller-custom`
 - Transport: streamable HTTP
 - Auth: OAuth 2.1, PKCE S256, dynamic client registration
-- 48 tools — 33 read, 15 write
+- 57 tools — 35 read, 22 write

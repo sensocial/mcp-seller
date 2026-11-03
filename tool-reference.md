@@ -1,12 +1,12 @@
 # Tool reference
 
-The connector provides 48 tools: **33 are read-only and 15 can write. Every write tool returns a
+The connector provides 57 tools: **35 are read-only and 22 can write. Every write tool returns a
 preview by default and applies a change only when confirmation is set.**
 
 Read-only tools are marked `readOnlyHint` in the protocol, so a compliant client can run them
-without prompting. Write tools are marked `readOnlyHint: false`; the seven that change or
-replace something already there (campaign status, store listings, order designs, a fulfillment
-order, a custom domain, a blog post) are also marked `destructiveHint`, so a compliant client
+without prompting. Write tools are marked `readOnlyHint: false`; the seventeen that change,
+remove or publish something (campaign edits, status and deletion, new campaigns, store settings
+and domains, order designs, a fulfillment order, a blog post) are also marked `destructiveHint`, so a compliant client
 prompts before applying them. The server does not enforce a separate human confirmation round
 trip; a client configured for automatic approval can send confirmation on its first call.
 
@@ -15,7 +15,7 @@ References to "your" data below mean data filtered by the backend, not by the as
 
 ---
 
-## Sales & analytics — 5 tools, all read
+## Sales & analytics — 6 tools, all read
 
 | Tool | What it returns |
 |---|---|
@@ -23,6 +23,7 @@ References to "your" data below mean data filtered by the backend, not by the as
 | Sales chart | Daily time series for sales, visits and each funnel step |
 | Sales breakdown | Sales, orders and profit split by one dimension: country, device, store, product, or ads campaign, source or medium |
 | Campaign sales | Your best-selling campaigns for a window, and totals for every campaign whose title contains a keyword |
+| Campaign funnel by day | Views, add-to-carts, checkouts, orders, items and sales per day for up to 30 of your campaigns, so an ad set can be matched against the store day by day (up to 62 days per call; about the last 6 months) |
 | Contest SenPoints | Your points in the latest SenPrints contest, its reward tiers and how far the next tier is |
 
 > Your campaigns can be cross-listed on the marketplace and on stores you do not own. Those
@@ -57,12 +58,13 @@ an indicative base cost, and every blocking error or warning before anything is 
 | **Start an artwork upload** | **Writes.** Reserves a path in your storage and returns a 30-minute upload link, so the file never passes through the chat |
 | **Confirm an artwork upload** | **Writes.** Checks the uploaded file arrived and is fit to print, then adds it to your media library |
 
-## Campaigns — 9 tools, 7 write
+## Campaigns — 16 tools, 13 write
 
 | Tool | What it does |
 |---|---|
 | Search campaigns | Your campaigns, filtered by status, keyword, store, type or created date |
 | Get campaign | One campaign by id or slug, including its pricing and cost fields |
+| Preview a campaign for a country | What a buyer in one country sees: price and currency per variant, whether it can be bought there and why not, and the shipping methods and fees the checkout offers |
 | **Set campaign status** | **Writes.** Switches campaigns between active and inactive |
 | **Take campaigns off a collection or store** | **Writes.** Removes the listing links; the campaigns stay active and keep their URL |
 | **Create custom campaigns** | **Writes.** Up to 20 campaigns per call from your own mockup photos |
@@ -70,12 +72,18 @@ an indicative base cost, and every blocking error or warning before anything is 
 | **Create regular campaigns** | **Writes.** Up to 20 campaigns per call, print designs placed on products the way the dashboard editor places them |
 | **Create an express template** | **Writes.** The product set (templates, prices, colors) that express campaigns sell |
 | **Create express campaigns** | **Writes.** Up to 20 campaigns per call from one express template, one design each |
+| **Edit campaigns** | **Writes.** Up to 20 per call: title, description, slug, collections, stores, end time and countdown, tracking pixels, marketplace listing and default product, as on the dashboard’s campaign edit page |
+| **Edit campaign products** | **Writes.** Up to 20 campaigns per call: price within the template’s range, compare-at price, colors, default color and options, as on the dashboard’s pricing tab |
+| **Change campaign designs** | **Writes.** Up to 20 campaigns per call: new or removed designs and mockups, and products that need artwork, where the dashboard allows it. A launched regular campaign is sent back to draft first, as the dashboard’s “Edit design” does |
+| **Manage a campaign’s discount codes** | **Writes.** Lists, creates, edits, switches on or off and removes the discount codes of one campaign. Only a code that has not been used can be edited or removed |
+| **Duplicate campaigns** | **Writes.** Up to 20 per call, into new draft campaigns, optionally with copies of the designs. Every copy counts against the 24-hour campaign limit |
+| **Delete campaigns** | **Writes.** Up to 50 per call. Only draft or inactive campaigns with no orders, and not express templates. A deleted campaign leaves the storefronts and cannot be restored |
 
 Without confirmation, every campaign write returns a preview listing exactly what would be
 created or changed, and anything refused because it does not belong to you or fails a check
 (price range, print size, trademark). Batch creation sends the preview's hash back on
 confirmation, so a confirmed call cannot create something different from what was previewed.
-No tool deletes a campaign or changes campaigns in draft, reviewing or blocked states.
+Only **Delete campaigns** removes a campaign, and only a draft or inactive one with no orders.
 
 ## Customers — 1 tool, read
 
@@ -88,7 +96,7 @@ phone, country, city, state, store, and the number and value of orders placed **
 Buyer credentials, payment-processor IDs and platform-wide totals are never returned. See
 [Data & security](/data-and-security).
 
-## Stores & team — 6 tools, 2 write
+## Stores & team — 7 tools, 3 write
 
 | Tool | What it does |
 |---|---|
@@ -97,6 +105,7 @@ Buyer credentials, payment-processor IDs and platform-wide totals are never retu
 | List store custom domains | The custom domains on your stores and their activation state |
 | Search team members | Members of your seller team, their role and which stores they may work on (account owner only) |
 | **Create a store** | **Writes.** Opens a new storefront on a SenPrints sub-domain |
+| **Update a store** | **Writes.** Tracking ids (Facebook, TikTok, Google, Pinterest, Snapchat, Bing, Reddit, Quora, Klaviyo), default currency, theme, logo and featured collection. The preview shows each field before and after |
 | **Add a custom domain to a store** | **Writes.** Attaches a domain you own and returns the DNS record to add; at most 5 per account per 24 hours |
 
 Marketplace connection tokens are never included, and webhook URLs are removed.
