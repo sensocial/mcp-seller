@@ -135,22 +135,25 @@ campaign exists.</p>
 
 <h2 id="read-only-unless-you-say-otherwise">Read-only unless you say otherwise</h2>
 
-<p>33 of 48 tools cannot change anything. The 15 that can:</p>
+<p>35 of 57 tools cannot change anything. The 22 that can:</p>
 
 <ul>
 <li><strong>Campaigns</strong> — create custom, all-over-print, regular and express campaigns (and express
-templates), switch campaigns active ↔ inactive, take campaigns off a collection or store</li>
+templates), edit their details, products, designs and discount codes, duplicate them, switch
+them active ↔ inactive, take them off a collection or store, and delete draft or inactive
+campaigns with no orders</li>
 <li><strong>Orders</strong> — place a fulfillment order, upload a print file for an order line waiting for a
 design, approve an order’s designs (may charge extra print cost to your SenPrints balance)</li>
 <li><strong>Artwork</strong> — start and confirm an upload to your own media library</li>
-<li><strong>Stores</strong> — create a store, attach a custom domain you own</li>
+<li><strong>Stores</strong> — create a store, change its settings, attach a custom domain you own</li>
 <li><strong>Blog</strong> — create or update a post, which publishes to your public storefront</li>
 </ul>
 
 <p>Without confirmation, every write tool returns a preview of the proposed change. It applies
-the change only when confirmation is set. All are marked <code>readOnlyHint: false</code>, and the seven
-that change or replace something already there are also marked <code>destructiveHint</code>, so a
-compliant client prompts before applying them. No tool deletes data.</p>
+the change only when confirmation is set. All are marked <code>readOnlyHint: false</code>, and the seventeen
+that change, remove or publish something are also marked <code>destructiveHint</code>, so a
+compliant client prompts before applying them. The only deletions are of draft or inactive
+campaigns with no orders and of unused discount codes.</p>
 
 <p>The server checks for confirmation but does not enforce a separate human confirmation round
 trip. If your AI client is configured to approve tool calls automatically, it can submit
@@ -187,7 +190,7 @@ buyer’s internal platform trust status is never returned.</p>
 <li>Move money: no payout requests, no transfers, no payment-method changes. Approving an
 order’s designs can charge its extra print cost to your SenPrints balance, as on the
 dashboard; a fulfillment order is paid for in the dashboard, not by the connector.</li>
-<li>Delete orders, campaigns, customers or stores.</li>
+<li>Delete orders, customers or stores, or campaigns that are active or have orders.</li>
 <li>Read your AI chat history, files or other client-side data. The connector responds to tool
 calls and does not collect data from the client.</li>
 </ul>

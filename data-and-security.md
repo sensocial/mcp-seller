@@ -17,20 +17,23 @@ campaign exists.
 
 ## Read-only unless you say otherwise
 
-33 of 48 tools cannot change anything. The 15 that can:
+35 of 57 tools cannot change anything. The 22 that can:
 
 - **Campaigns** — create custom, all-over-print, regular and express campaigns (and express
-  templates), switch campaigns active ↔ inactive, take campaigns off a collection or store
+  templates), edit their details, products, designs and discount codes, duplicate them, switch
+  them active ↔ inactive, take them off a collection or store, and delete draft or inactive
+  campaigns with no orders
 - **Orders** — place a fulfillment order, upload a print file for an order line waiting for a
   design, approve an order's designs (may charge extra print cost to your SenPrints balance)
 - **Artwork** — start and confirm an upload to your own media library
-- **Stores** — create a store, attach a custom domain you own
+- **Stores** — create a store, change its settings, attach a custom domain you own
 - **Blog** — create or update a post, which publishes to your public storefront
 
 Without confirmation, every write tool returns a preview of the proposed change. It applies
-the change only when confirmation is set. All are marked `readOnlyHint: false`, and the seven
-that change or replace something already there are also marked `destructiveHint`, so a
-compliant client prompts before applying them. No tool deletes data.
+the change only when confirmation is set. All are marked `readOnlyHint: false`, and the seventeen
+that change, remove or publish something are also marked `destructiveHint`, so a
+compliant client prompts before applying them. The only deletions are of draft or inactive
+campaigns with no orders and of unused discount codes.
 
 The server checks for confirmation but does not enforce a separate human confirmation round
 trip. If your AI client is configured to approve tool calls automatically, it can submit
@@ -61,7 +64,7 @@ buyer's internal platform trust status is never returned.
 - Move money: no payout requests, no transfers, no payment-method changes. Approving an
   order's designs can charge its extra print cost to your SenPrints balance, as on the
   dashboard; a fulfillment order is paid for in the dashboard, not by the connector.
-- Delete orders, campaigns, customers or stores.
+- Delete orders, customers or stores, or campaigns that are active or have orders.
 - Read your AI chat history, files or other client-side data. The connector responds to tool
   calls and does not collect data from the client.
 

@@ -10,10 +10,10 @@ connector answers with data from your SenPrints seller account.
 The connector links your SenPrints seller account to Claude, ChatGPT, Cursor, or another AI
 client that supports the Model Context Protocol (MCP). Once connected, the assistant can read
 your sales, orders, customers, campaigns, stores, payouts and billing. When you ask it to, it
-can also create campaigns and stores, place fulfillment orders, handle order designs and
-publish blog posts.
+can also create, edit and delete campaigns, create and update stores, place fulfillment orders,
+handle order designs and publish blog posts.
 
-**Of the 48 tools, 33 are read-only. The 15 write tools return a preview by default and apply
+**Of the 57 tools, 35 are read-only. The 22 write tools return a preview by default and apply
 a change only when confirmation is set. They are marked `readOnlyHint: false`, and the ones
 that change something already there are also marked `destructiveHint`, so a compliant client
 prompts before applying them. The server does not require a separate human round trip: a
@@ -28,7 +28,7 @@ See [Data & security](/data-and-security).
 |---|---|
 | [Connect in 3 steps](/connect) | Link your account to Claude, ChatGPT or Cursor |
 | [What you can ask](/what-you-can-ask) | Example questions that work well |
-| [Tool reference](/tool-reference) | All 48 tools, what each one reads or writes |
+| [Tool reference](/tool-reference) | All 57 tools, what each one reads or writes |
 | [Data & security](/data-and-security) | What the assistant can see, and what it cannot |
 | [Privacy](/privacy) | What leaves SenPrints, where it goes, how long we keep it |
 | [Support](/support) | When something does not work |
@@ -50,7 +50,7 @@ connection cannot access another seller's data.
 - **Not an admin tool.** It cannot see other sellers, platform totals, or anything staff-only.
 - **Not unattended.** Every write previews by default and applies only when confirmation is
   set; automatic client approval can provide confirmation on the first call. No tool deletes an
-  order, campaign, customer or store.
+  order, customer or store; only draft or inactive campaigns with no orders can be deleted.
 - **Not a payments tool.** It can tell you what your balance and payouts look like. It cannot
   request a payout, transfer money, or change a payment method. The only charge a tool can
   cause is the extra print cost when you approve an order's designs, taken from your SenPrints

@@ -4,17 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tool reference — SenPrints Seller Connector</title>
-<meta name="description" content="All 48 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
+<meta name="description" content="All 57 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
 <link rel="canonical" href="https://mcp.senprints.com/tool-reference">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SenPrints Seller Connector">
 <meta property="og:title" content="Tool reference — SenPrints Seller Connector">
-<meta property="og:description" content="All 48 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
+<meta property="og:description" content="All 57 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
 <meta property="og:url" content="https://mcp.senprints.com/tool-reference">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tool reference — SenPrints Seller Connector">
-<meta name="twitter:description" content="All 48 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
+<meta name="twitter:description" content="All 57 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
 
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
@@ -50,7 +50,7 @@ if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)
     {
       "@type": "TechArticle",
       "headline": "Tool reference",
-      "description": "All 48 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.",
+      "description": "All 57 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.",
       "url": "https://mcp.senprints.com/tool-reference",
       "isPartOf": {
         "@type": "WebSite",
@@ -118,13 +118,13 @@ if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)
 <main class="content" id="main">
 <h1>Tool reference</h1>
 
-<p>The connector provides 48 tools: <strong>33 are read-only and 15 can write. Every write tool returns a
+<p>The connector provides 57 tools: <strong>35 are read-only and 22 can write. Every write tool returns a
 preview by default and applies a change only when confirmation is set.</strong></p>
 
 <p>Read-only tools are marked <code>readOnlyHint</code> in the protocol, so a compliant client can run them
-without prompting. Write tools are marked <code>readOnlyHint: false</code>; the seven that change or
-replace something already there (campaign status, store listings, order designs, a fulfillment
-order, a custom domain, a blog post) are also marked <code>destructiveHint</code>, so a compliant client
+without prompting. Write tools are marked <code>readOnlyHint: false</code>; the seventeen that change,
+remove or publish something (campaign edits, status and deletion, new campaigns, store settings
+and domains, order designs, a fulfillment order, a blog post) are also marked <code>destructiveHint</code>, so a compliant client
 prompts before applying them. The server does not enforce a separate human confirmation round
 trip; a client configured for automatic approval can send confirmation on its first call.</p>
 
@@ -133,7 +133,7 @@ References to “your” data below mean data filtered by the backend, not by th
 
 <hr>
 
-<h2 id="sales-analytics-5-tools-all-read">Sales &amp; analytics — 5 tools, all read</h2>
+<h2 id="sales-analytics-6-tools-all-read">Sales &amp; analytics — 6 tools, all read</h2>
 
 <div class="tablewrap">
 <table>
@@ -143,6 +143,7 @@ References to “your” data below mean data filtered by the backend, not by th
 <tr><td>Sales chart</td><td>Daily time series for sales, visits and each funnel step</td></tr>
 <tr><td>Sales breakdown</td><td>Sales, orders and profit split by one dimension: country, device, store, product, or ads campaign, source or medium</td></tr>
 <tr><td>Campaign sales</td><td>Your best-selling campaigns for a window, and totals for every campaign whose title contains a keyword</td></tr>
+<tr><td>Campaign funnel by day</td><td>Views, add-to-carts, checkouts, orders, items and sales per day for up to 30 of your campaigns, so an ad set can be matched against the store day by day (up to 62 days per call; about the last 6 months)</td></tr>
 <tr><td>Contest SenPoints</td><td>Your points in the latest SenPrints contest, its reward tiers and how far the next tier is</td></tr>
 </tbody>
 </table>
@@ -192,7 +193,7 @@ an indicative base cost, and every blocking error or warning before anything is 
 </table>
 </div>
 
-<h2 id="campaigns-9-tools-7-write">Campaigns — 9 tools, 7 write</h2>
+<h2 id="campaigns-16-tools-13-write">Campaigns — 16 tools, 13 write</h2>
 
 <div class="tablewrap">
 <table>
@@ -200,6 +201,7 @@ an indicative base cost, and every blocking error or warning before anything is 
 <tbody>
 <tr><td>Search campaigns</td><td>Your campaigns, filtered by status, keyword, store, type or created date</td></tr>
 <tr><td>Get campaign</td><td>One campaign by id or slug, including its pricing and cost fields</td></tr>
+<tr><td>Preview a campaign for a country</td><td>What a buyer in one country sees: price and currency per variant, whether it can be bought there and why not, and the shipping methods and fees the checkout offers</td></tr>
 <tr class="w"><td><strong>Set campaign status</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Switches campaigns between active and inactive</td></tr>
 <tr class="w"><td><strong>Take campaigns off a collection or store</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Removes the listing links; the campaigns stay active and keep their URL</td></tr>
 <tr class="w"><td><strong>Create custom campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 campaigns per call from your own mockup photos</td></tr>
@@ -207,6 +209,12 @@ an indicative base cost, and every blocking error or warning before anything is 
 <tr class="w"><td><strong>Create regular campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 campaigns per call, print designs placed on products the way the dashboard editor places them</td></tr>
 <tr class="w"><td><strong>Create an express template</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> The product set (templates, prices, colors) that express campaigns sell</td></tr>
 <tr class="w"><td><strong>Create express campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 campaigns per call from one express template, one design each</td></tr>
+<tr class="w"><td><strong>Edit campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 per call: title, description, slug, collections, stores, end time and countdown, tracking pixels, marketplace listing and default product, as on the dashboard’s campaign edit page</td></tr>
+<tr class="w"><td><strong>Edit campaign products</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 campaigns per call: price within the template’s range, compare-at price, colors, default color and options, as on the dashboard’s pricing tab</td></tr>
+<tr class="w"><td><strong>Change campaign designs</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 campaigns per call: new or removed designs and mockups, and products that need artwork, where the dashboard allows it. A launched regular campaign is sent back to draft first, as the dashboard’s “Edit design” does</td></tr>
+<tr class="w"><td><strong>Manage a campaign’s discount codes</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Lists, creates, edits, switches on or off and removes the discount codes of one campaign. Only a code that has not been used can be edited or removed</td></tr>
+<tr class="w"><td><strong>Duplicate campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 per call, into new draft campaigns, optionally with copies of the designs. Every copy counts against the 24-hour campaign limit</td></tr>
+<tr class="w"><td><strong>Delete campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 50 per call. Only draft or inactive campaigns with no orders, and not express templates. A deleted campaign leaves the storefronts and cannot be restored</td></tr>
 </tbody>
 </table>
 </div>
@@ -215,7 +223,7 @@ an indicative base cost, and every blocking error or warning before anything is 
 created or changed, and anything refused because it does not belong to you or fails a check
 (price range, print size, trademark). Batch creation sends the preview’s hash back on
 confirmation, so a confirmed call cannot create something different from what was previewed.
-No tool deletes a campaign or changes campaigns in draft, reviewing or blocked states.</p>
+Only <strong>Delete campaigns</strong> removes a campaign, and only a draft or inactive one with no orders.</p>
 
 <h2 id="customers-1-tool-read">Customers — 1 tool, read</h2>
 
@@ -233,7 +241,7 @@ phone, country, city, state, store, and the number and value of orders placed <s
 Buyer credentials, payment-processor IDs and platform-wide totals are never returned. See
 <a href="data-and-security">Data &amp; security</a>.</p>
 
-<h2 id="stores-team-6-tools-2-write">Stores &amp; team — 6 tools, 2 write</h2>
+<h2 id="stores-team-7-tools-3-write">Stores &amp; team — 7 tools, 3 write</h2>
 
 <div class="tablewrap">
 <table>
@@ -244,6 +252,7 @@ Buyer credentials, payment-processor IDs and platform-wide totals are never retu
 <tr><td>List store custom domains</td><td>The custom domains on your stores and their activation state</td></tr>
 <tr><td>Search team members</td><td>Members of your seller team, their role and which stores they may work on (account owner only)</td></tr>
 <tr class="w"><td><strong>Create a store</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Opens a new storefront on a SenPrints sub-domain</td></tr>
+<tr class="w"><td><strong>Update a store</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Tracking ids (Facebook, TikTok, Google, Pinterest, Snapchat, Bing, Reddit, Quora, Klaviyo), default currency, theme, logo and featured collection. The preview shows each field before and after</td></tr>
 <tr class="w"><td><strong>Add a custom domain to a store</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Attaches a domain you own and returns the DNS record to add; at most 5 per account per 24 hours</td></tr>
 </tbody>
 </table>

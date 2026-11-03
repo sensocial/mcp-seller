@@ -1,6 +1,6 @@
 # SenPrints Seller Connector
 
-> A remote Model Context Protocol (MCP) server, operated by SenPrints, that lets a seller's AI assistant read their own SenPrints print-on-demand account — sales, orders, customers, campaigns, stores, payouts and billing — and, when instructed, create campaigns and stores, place fulfillment orders, handle order designs and publish storefront blog posts. 48 tools: 33 read-only, 15 write, every write previewed first.
+> A remote Model Context Protocol (MCP) server, operated by SenPrints, that lets a seller's AI assistant read their own SenPrints print-on-demand account — sales, orders, customers, campaigns, stores, payouts and billing — and, when instructed, create, edit and delete campaigns, create and update stores, place fulfillment orders, handle order designs and publish storefront blog posts. 57 tools: 35 read-only, 22 write, every write previewed first.
 
 - Endpoint: https://api.senprints.com/mcp/seller (streamable HTTP, OAuth 2.1 with dynamic client registration)
 - Audience: SenPrints sellers using Claude, ChatGPT, Cursor or another MCP client
@@ -21,10 +21,10 @@ connector answers with data from your SenPrints seller account.
 The connector links your SenPrints seller account to Claude, ChatGPT, Cursor, or another AI
 client that supports the Model Context Protocol (MCP). Once connected, the assistant can read
 your sales, orders, customers, campaigns, stores, payouts and billing. When you ask it to, it
-can also create campaigns and stores, place fulfillment orders, handle order designs and
-publish blog posts.
+can also create, edit and delete campaigns, create and update stores, place fulfillment orders,
+handle order designs and publish blog posts.
 
-**Of the 48 tools, 33 are read-only. The 15 write tools return a preview by default and apply
+**Of the 57 tools, 35 are read-only. The 22 write tools return a preview by default and apply
 a change only when confirmation is set. They are marked `readOnlyHint: false`, and the ones
 that change something already there are also marked `destructiveHint`, so a compliant client
 prompts before applying them. The server does not require a separate human round trip: a
@@ -39,7 +39,7 @@ See [Data & security](/data-and-security).
 |---|---|
 | [Connect in 3 steps](/connect) | Link your account to Claude, ChatGPT or Cursor |
 | [What you can ask](/what-you-can-ask) | Example questions that work well |
-| [Tool reference](/tool-reference) | All 48 tools, what each one reads or writes |
+| [Tool reference](/tool-reference) | All 57 tools, what each one reads or writes |
 | [Data & security](/data-and-security) | What the assistant can see, and what it cannot |
 | [Privacy](/privacy) | What leaves SenPrints, where it goes, how long we keep it |
 | [Support](/support) | When something does not work |
@@ -61,7 +61,7 @@ connection cannot access another seller's data.
 - **Not an admin tool.** It cannot see other sellers, platform totals, or anything staff-only.
 - **Not unattended.** Every write previews by default and applies only when confirmation is
   set; automatic client approval can provide confirmation on the first call. No tool deletes an
-  order, campaign, customer or store.
+  order, customer or store; only draft or inactive campaigns with no orders can be deleted.
 - **Not a payments tool.** It can tell you what your balance and payouts look like. It cannot
   request a payout, transfer money, or change a payment method. The only charge a tool can
   cause is the extra print cost when you approve an order's designs, taken from your SenPrints
@@ -264,19 +264,19 @@ wrong account.
 - Request a payout, transfer money, or change a payment method.
 - Apply a write without confirmation set. Without confirmation, the tool returns a preview.
   With automatic client approval, confirmation can be supplied on the first call.
-- Delete a campaign, an order, a customer or a store.
+- Delete an order, a customer or a store, or a campaign that is active or has orders.
 
 ---
 
 # Tool reference
 
-The connector provides 48 tools: **33 are read-only and 15 can write. Every write tool returns a
+The connector provides 57 tools: **35 are read-only and 22 can write. Every write tool returns a
 preview by default and applies a change only when confirmation is set.**
 
 Read-only tools are marked `readOnlyHint` in the protocol, so a compliant client can run them
-without prompting. Write tools are marked `readOnlyHint: false`; the seven that change or
-replace something already there (campaign status, store listings, order designs, a fulfillment
-order, a custom domain, a blog post) are also marked `destructiveHint`, so a compliant client
+without prompting. Write tools are marked `readOnlyHint: false`; the seventeen that change,
+remove or publish something (campaign edits, status and deletion, new campaigns, store settings
+and domains, order designs, a fulfillment order, a blog post) are also marked `destructiveHint`, so a compliant client
 prompts before applying them. The server does not enforce a separate human confirmation round
 trip; a client configured for automatic approval can send confirmation on its first call.
 
@@ -285,7 +285,7 @@ References to "your" data below mean data filtered by the backend, not by the as
 
 ---
 
-## Sales & analytics — 5 tools, all read
+## Sales & analytics — 6 tools, all read
 
 | Tool | What it returns |
 |---|---|
@@ -293,6 +293,7 @@ References to "your" data below mean data filtered by the backend, not by the as
 | Sales chart | Daily time series for sales, visits and each funnel step |
 | Sales breakdown | Sales, orders and profit split by one dimension: country, device, store, product, or ads campaign, source or medium |
 | Campaign sales | Your best-selling campaigns for a window, and totals for every campaign whose title contains a keyword |
+| Campaign funnel by day | Views, add-to-carts, checkouts, orders, items and sales per day for up to 30 of your campaigns, so an ad set can be matched against the store day by day (up to 62 days per call; about the last 6 months) |
 | Contest SenPoints | Your points in the latest SenPrints contest, its reward tiers and how far the next tier is |
 
 > Your campaigns can be cross-listed on the marketplace and on stores you do not own. Those
@@ -327,12 +328,13 @@ an indicative base cost, and every blocking error or warning before anything is 
 | **Start an artwork upload** | **Writes.** Reserves a path in your storage and returns a 30-minute upload link, so the file never passes through the chat |
 | **Confirm an artwork upload** | **Writes.** Checks the uploaded file arrived and is fit to print, then adds it to your media library |
 
-## Campaigns — 9 tools, 7 write
+## Campaigns — 16 tools, 13 write
 
 | Tool | What it does |
 |---|---|
 | Search campaigns | Your campaigns, filtered by status, keyword, store, type or created date |
 | Get campaign | One campaign by id or slug, including its pricing and cost fields |
+| Preview a campaign for a country | What a buyer in one country sees: price and currency per variant, whether it can be bought there and why not, and the shipping methods and fees the checkout offers |
 | **Set campaign status** | **Writes.** Switches campaigns between active and inactive |
 | **Take campaigns off a collection or store** | **Writes.** Removes the listing links; the campaigns stay active and keep their URL |
 | **Create custom campaigns** | **Writes.** Up to 20 campaigns per call from your own mockup photos |
@@ -340,12 +342,18 @@ an indicative base cost, and every blocking error or warning before anything is 
 | **Create regular campaigns** | **Writes.** Up to 20 campaigns per call, print designs placed on products the way the dashboard editor places them |
 | **Create an express template** | **Writes.** The product set (templates, prices, colors) that express campaigns sell |
 | **Create express campaigns** | **Writes.** Up to 20 campaigns per call from one express template, one design each |
+| **Edit campaigns** | **Writes.** Up to 20 per call: title, description, slug, collections, stores, end time and countdown, tracking pixels, marketplace listing and default product, as on the dashboard’s campaign edit page |
+| **Edit campaign products** | **Writes.** Up to 20 campaigns per call: price within the template’s range, compare-at price, colors, default color and options, as on the dashboard’s pricing tab |
+| **Change campaign designs** | **Writes.** Up to 20 campaigns per call: new or removed designs and mockups, and products that need artwork, where the dashboard allows it. A launched regular campaign is sent back to draft first, as the dashboard’s “Edit design” does |
+| **Manage a campaign’s discount codes** | **Writes.** Lists, creates, edits, switches on or off and removes the discount codes of one campaign. Only a code that has not been used can be edited or removed |
+| **Duplicate campaigns** | **Writes.** Up to 20 per call, into new draft campaigns, optionally with copies of the designs. Every copy counts against the 24-hour campaign limit |
+| **Delete campaigns** | **Writes.** Up to 50 per call. Only draft or inactive campaigns with no orders, and not express templates. A deleted campaign leaves the storefronts and cannot be restored |
 
 Without confirmation, every campaign write returns a preview listing exactly what would be
 created or changed, and anything refused because it does not belong to you or fails a check
 (price range, print size, trademark). Batch creation sends the preview's hash back on
 confirmation, so a confirmed call cannot create something different from what was previewed.
-No tool deletes a campaign or changes campaigns in draft, reviewing or blocked states.
+Only **Delete campaigns** removes a campaign, and only a draft or inactive one with no orders.
 
 ## Customers — 1 tool, read
 
@@ -358,7 +366,7 @@ phone, country, city, state, store, and the number and value of orders placed **
 Buyer credentials, payment-processor IDs and platform-wide totals are never returned. See
 [Data & security](/data-and-security).
 
-## Stores & team — 6 tools, 2 write
+## Stores & team — 7 tools, 3 write
 
 | Tool | What it does |
 |---|---|
@@ -367,6 +375,7 @@ Buyer credentials, payment-processor IDs and platform-wide totals are never retu
 | List store custom domains | The custom domains on your stores and their activation state |
 | Search team members | Members of your seller team, their role and which stores they may work on (account owner only) |
 | **Create a store** | **Writes.** Opens a new storefront on a SenPrints sub-domain |
+| **Update a store** | **Writes.** Tracking ids (Facebook, TikTok, Google, Pinterest, Snapchat, Bing, Reddit, Quora, Klaviyo), default currency, theme, logo and featured collection. The preview shows each field before and after |
 | **Add a custom domain to a store** | **Writes.** Attaches a domain you own and returns the DNS record to add; at most 5 per account per 24 hours |
 
 Marketplace connection tokens are never included, and webhook URLs are removed.
@@ -438,20 +447,23 @@ campaign exists.
 
 ## Read-only unless you say otherwise
 
-33 of 48 tools cannot change anything. The 15 that can:
+35 of 57 tools cannot change anything. The 22 that can:
 
 - **Campaigns** — create custom, all-over-print, regular and express campaigns (and express
-  templates), switch campaigns active ↔ inactive, take campaigns off a collection or store
+  templates), edit their details, products, designs and discount codes, duplicate them, switch
+  them active ↔ inactive, take them off a collection or store, and delete draft or inactive
+  campaigns with no orders
 - **Orders** — place a fulfillment order, upload a print file for an order line waiting for a
   design, approve an order's designs (may charge extra print cost to your SenPrints balance)
 - **Artwork** — start and confirm an upload to your own media library
-- **Stores** — create a store, attach a custom domain you own
+- **Stores** — create a store, change its settings, attach a custom domain you own
 - **Blog** — create or update a post, which publishes to your public storefront
 
 Without confirmation, every write tool returns a preview of the proposed change. It applies
-the change only when confirmation is set. All are marked `readOnlyHint: false`, and the seven
-that change or replace something already there are also marked `destructiveHint`, so a
-compliant client prompts before applying them. No tool deletes data.
+the change only when confirmation is set. All are marked `readOnlyHint: false`, and the seventeen
+that change, remove or publish something are also marked `destructiveHint`, so a
+compliant client prompts before applying them. The only deletions are of draft or inactive
+campaigns with no orders and of unused discount codes.
 
 The server checks for confirmation but does not enforce a separate human confirmation round
 trip. If your AI client is configured to approve tool calls automatically, it can submit
@@ -482,7 +494,7 @@ buyer's internal platform trust status is never returned.
 - Move money: no payout requests, no transfers, no payment-method changes. Approving an
   order's designs can charge its extra print cost to your SenPrints balance, as on the
   dashboard; a fulfillment order is paid for in the dashboard, not by the connector.
-- Delete orders, campaigns, customers or stores.
+- Delete orders, customers or stores, or campaigns that are active or have orders.
 - Read your AI chat history, files or other client-side data. The connector responds to tool
   calls and does not collect data from the client.
 
@@ -723,4 +735,4 @@ been exposed, revoke it at **Settings → MCP** before contacting support.
 - Seller-center variant: `https://api.senprints.com/mcp/seller-custom`
 - Transport: streamable HTTP
 - Auth: OAuth 2.1, PKCE S256, dynamic client registration
-- 48 tools — 33 read, 15 write
+- 57 tools — 35 read, 22 write

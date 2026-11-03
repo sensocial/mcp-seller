@@ -96,4 +96,4 @@ wrong account.
 - Request a payout, transfer money, or change a payment method.
 - Apply a write without confirmation set. Without confirmation, the tool returns a preview.
   With automatic client approval, confirmation can be supplied on the first call.
-- Delete a campaign, an order, a customer or a store.
+- Delete an order, a customer or a store, or a campaign that is active or has orders.
