@@ -17,7 +17,7 @@ campaign exists.
 
 ## Read-only unless you say otherwise
 
-35 of 57 tools cannot change anything. The 22 that can:
+Read-only tools return data. Write tools cover these operations.
 
 - **Campaigns** — create custom, all-over-print, regular and express campaigns (and express
   templates), edit their details, products, designs and discount codes, duplicate them, switch
@@ -29,11 +29,7 @@ campaign exists.
 - **Stores** — create a store, change its settings, attach a custom domain you own
 - **Blog** — create or update a post, which publishes to your public storefront
 
-Without confirmation, every write tool returns a preview of the proposed change. It applies
-the change only when confirmation is set. All are marked `readOnlyHint: false`, and the seventeen
-that change, remove or publish something are also marked `destructiveHint`, so a
-compliant client prompts before applying them. The only deletions are of draft or inactive
-campaigns with no orders and of unused discount codes.
+Write tools that use confirmation preview the proposed change by default. Starting and confirming an artwork upload write on the first call. Review confirmation prompts in your AI client.
 
 The server checks for confirmation but does not enforce a separate human confirmation round
 trip. If your AI client is configured to approve tool calls automatically, it can submit
@@ -61,7 +57,7 @@ buyer's internal platform trust status is never returned.
 ## What the connector cannot do
 
 - Reach another seller's data, or any platform-wide or staff-only view.
-- Move money: no payout requests, no transfers, no payment-method changes. Approving an
+- Payout requests and transfers are handled outside the connector. On server versions that expose payment gateway settings, eligible sellers can assign an existing Stripe or PayPal gateway to a store’s checkout. The connector does not return gateway secrets or initiate a checkout payment. Approving an
   order's designs can charge its extra print cost to your SenPrints balance, as on the
   dashboard; a fulfillment order is paid for in the dashboard, not by the connector.
 - Delete orders, customers or stores, or campaigns that are active or have orders.

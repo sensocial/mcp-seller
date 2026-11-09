@@ -144,7 +144,7 @@ requests.</p>
 sixth token automatically revokes the oldest.</p>
 
 <p class="q">“It changed something I didn’t approve.”</p>
-<p>Every write tool returns a preview by default and applies only when confirmation is set. Write
+<p>Write tools that use confirmation preview the proposed change by default. Starting and confirming an artwork upload write on the first call. Write
 tools are marked <code>readOnlyHint: false</code> (and <code>destructiveHint</code> where they change something
 already there), so a compliant client prompts before applying a change. The server
 does not require a human second round trip: if your AI client approves tool calls
@@ -189,7 +189,6 @@ been exposed, revoke it at <strong>Settings → MCP</strong> before contacting s
 <li>Seller-center variant: <code>https://api.senprints.com/mcp/seller-custom</code></li>
 <li>Transport: streamable HTTP</li>
 <li>Auth: OAuth 2.1, PKCE S256, dynamic client registration</li>
-<li>57 tools — 35 read, 22 write</li>
 </ul>
 </main>
 

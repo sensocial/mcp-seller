@@ -66,7 +66,7 @@ average order value (AOV), visits and funnel steps between a visit and a paid or
   — previews the target, state, slug and body size by default, then saves when confirmation is
   set
 
-Every write tool previews first, and the ones that change something already there are marked
+Write tools that use confirmation preview the proposed change by default. Starting and confirming an artwork upload write on the first call. Tools that change something already there are marked
 `destructiveHint`. A compliant client prompts before applying a change, but the server does
 not require a separate human confirmation round trip. A client
 configured for automatic approval can submit confirmation on its first call.
@@ -93,7 +93,7 @@ wrong account.
 ## What it will not do
 
 - Show you another seller's data, platform totals, or anything staff-only.
-- Request a payout, transfer money, or change a payment method.
-- Apply a write without confirmation set. Without confirmation, the tool returns a preview.
+- Request a payout or transfer money.
+- Apply a confirmation-based write without confirmation set. Without confirmation, the tool returns a preview.
   With automatic client approval, confirmation can be supplied on the first call.
 - Delete an order, a customer or a store, or a campaign that is active or has orders.
