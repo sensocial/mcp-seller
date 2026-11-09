@@ -1,21 +1,15 @@
 # Tool reference
 
-The connector provides 57 tools: **35 are read-only and 22 can write. Every write tool returns a
-preview by default and applies a change only when confirmation is set.**
+Tools shown by your client depend on the server version and your account permissions. Write tools that use confirmation preview the proposed change by default. Starting and confirming an artwork upload write on the first call.
 
-Read-only tools are marked `readOnlyHint` in the protocol, so a compliant client can run them
-without prompting. Write tools are marked `readOnlyHint: false`; the seventeen that change,
-remove or publish something (campaign edits, status and deletion, new campaigns, store settings
-and domains, order designs, a fulfillment order, a blog post) are also marked `destructiveHint`, so a compliant client
-prompts before applying them. The server does not enforce a separate human confirmation round
-trip; a client configured for automatic approval can send confirmation on its first call.
+Read-only tools advertise `readOnlyHint`. Write tools advertise `readOnlyHint: false` and indicate destructive actions with `destructiveHint`. Review previews in your client before applying changes.
 
 Every tool is filtered server-side to the seller account authorised for the connection.
 References to "your" data below mean data filtered by the backend, not by the assistant.
 
 ---
 
-## Sales & analytics — 6 tools, all read
+## Sales & analytics
 
 | Tool | What it returns |
 |---|---|
@@ -30,7 +24,7 @@ References to "your" data below mean data filtered by the backend, not by the as
 > rows are combined in an anonymous **"Other"** bucket. Your figures are included, but the
 > other party's store identity is not returned.
 
-## Orders — 9 tools, 3 write
+## Orders
 
 | Tool | What it does |
 |---|---|
@@ -47,7 +41,7 @@ References to "your" data below mean data filtered by the backend, not by the as
 The fulfillment-order preview resolves each line against the catalog and reports the variant,
 an indicative base cost, and every blocking error or warning before anything is created.
 
-## Artwork & catalog — 6 tools, 2 write
+## Artwork & catalog
 
 | Tool | What it does |
 |---|---|
@@ -58,7 +52,7 @@ an indicative base cost, and every blocking error or warning before anything is 
 | **Start an artwork upload** | **Writes.** Reserves a path in your storage and returns a 30-minute upload link, so the file never passes through the chat |
 | **Confirm an artwork upload** | **Writes.** Checks the uploaded file arrived and is fit to print, then adds it to your media library |
 
-## Campaigns — 16 tools, 13 write
+## Campaigns
 
 | Tool | What it does |
 |---|---|
@@ -72,6 +66,7 @@ an indicative base cost, and every blocking error or warning before anything is 
 | **Create regular campaigns** | **Writes.** Up to 20 campaigns per call, print designs placed on products the way the dashboard editor places them |
 | **Create an express template** | **Writes.** The product set (templates, prices, colors) that express campaigns sell |
 | **Create express campaigns** | **Writes.** Up to 20 campaigns per call from one express template, one design each |
+| **Create Layerkit campaigns** | **Writes.** Create campaigns from your Layerkit templates for buyer personalization. |
 | **Edit campaigns** | **Writes.** Up to 20 per call: title, description, slug, collections, stores, end time and countdown, tracking pixels, marketplace listing and default product, as on the dashboard’s campaign edit page |
 | **Edit campaign products** | **Writes.** Up to 20 campaigns per call: price within the template’s range, compare-at price, colors, default color and options, as on the dashboard’s pricing tab |
 | **Change campaign designs** | **Writes.** Up to 20 campaigns per call: new or removed designs and mockups, and products that need artwork, where the dashboard allows it. A launched regular campaign is sent back to draft first, as the dashboard’s “Edit design” does |
@@ -85,7 +80,14 @@ created or changed, and anything refused because it does not belong to you or fa
 confirmation, so a confirmed call cannot create something different from what was previewed.
 Only **Delete campaigns** removes a campaign, and only a draft or inactive one with no orders.
 
-## Customers — 1 tool, read
+## Collections
+
+| Tool | What it does |
+|---|---|
+| Search collections | Find your collections or read their campaigns, SEO and banners. |
+| **Manage collections** | **Writes.** Create, edit or remove a collection you own. |
+
+## Customers
 
 | Tool | What it returns |
 |---|---|
@@ -96,7 +98,7 @@ phone, country, city, state, store, and the number and value of orders placed **
 Buyer credentials, payment-processor IDs and platform-wide totals are never returned. See
 [Data & security](/data-and-security).
 
-## Stores & team — 7 tools, 3 write
+## Stores & team
 
 | Tool | What it does |
 |---|---|
@@ -107,10 +109,13 @@ Buyer credentials, payment-processor IDs and platform-wide totals are never retu
 | **Create a store** | **Writes.** Opens a new storefront on a SenPrints sub-domain |
 | **Update a store** | **Writes.** Tracking ids (Facebook, TikTok, Google, Pinterest, Snapchat, Bing, Reddit, Quora, Klaviyo), default currency, theme, logo and featured collection. The preview shows each field before and after |
 | **Add a custom domain to a store** | **Writes.** Attaches a domain you own and returns the DNS record to add; at most 5 per account per 24 hours |
+| Get store UI widgets | Read the banners, collection grids and other widgets on a store’s pages. |
+| **Set store UI widgets** | **Writes.** Replace the widget list of a store page. Widgets omitted from the list are removed. |
+| List payment gateways | Read the account’s existing Stripe and PayPal gateway configuration and the stores that use it. Gateway secrets are excluded. |
 
-Marketplace connection tokens are never included, and webhook URLs are removed.
+Marketplace connection tokens are never included, and webhook URLs are removed. On server versions that expose payment gateway settings, eligible sellers can assign an existing Stripe or PayPal gateway to a store’s checkout. The connector does not return gateway secrets or initiate a checkout payment.
 
-## Money — 5 tools, all read
+## Money
 
 | Tool | What it returns |
 |---|---|
@@ -123,11 +128,10 @@ Marketplace connection tokens are never included, and webhook URLs are removed.
 Amounts are in USD, the platform settlement currency. Gateway response traces, payout
 signatures and raw topup payloads are removed before a response is returned.
 
-No tool requests a payout, transfers money or changes a payment method. The only charge a tool
-can cause is the extra print cost of a multi-print-space product when you approve an order's
-designs, deducted from your SenPrints balance as it is on the dashboard.
+The connector can read balances and payouts. Payout requests, transfers and payment for fulfillment orders are handled outside the connector. Approving an order’s designs can charge extra print costs to your SenPrints balance.
 
-## Blog & SEO — 4 tools, 1 writes
+
+## Blog & SEO
 
 | Tool | What it does |
 |---|---|
@@ -141,14 +145,14 @@ update a post, the resolved URL slug, target store, published state and body siz
 it retains the existing slug unless you provide a new one. All HTML is sanitised when saved,
 so scripts and event handlers are removed from submitted content.
 
-## Help center — 2 tools, all read
+## Help center
 
 | Tool | What it returns |
 |---|---|
 | Search SenPrints guides | Help center guides, seller policies and announcements matching your keywords |
 | Read a SenPrints guide | One article in full, with its link |
 
-## Account — 1 tool, read
+## Account
 
 | Tool | What it returns |
 |---|---|

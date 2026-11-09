@@ -4,17 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tool reference — SenPrints Seller Connector</title>
-<meta name="description" content="All 57 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
+<meta name="description" content="Tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
 <link rel="canonical" href="https://mcp.senprints.com/tool-reference">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SenPrints Seller Connector">
 <meta property="og:title" content="Tool reference — SenPrints Seller Connector">
-<meta property="og:description" content="All 57 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
+<meta property="og:description" content="Tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
 <meta property="og:url" content="https://mcp.senprints.com/tool-reference">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tool reference — SenPrints Seller Connector">
-<meta name="twitter:description" content="All 57 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
+<meta name="twitter:description" content="Tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.">
 
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
@@ -50,7 +50,7 @@ if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)
     {
       "@type": "TechArticle",
       "headline": "Tool reference",
-      "description": "All 57 tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.",
+      "description": "Tools in the SenPrints Seller MCP connector, grouped by area, with what each one reads or writes.",
       "url": "https://mcp.senprints.com/tool-reference",
       "isPartOf": {
         "@type": "WebSite",
@@ -118,22 +118,16 @@ if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)
 <main class="content" id="main">
 <h1>Tool reference</h1>
 
-<p>The connector provides 57 tools: <strong>35 are read-only and 22 can write. Every write tool returns a
-preview by default and applies a change only when confirmation is set.</strong></p>
+<p>Tools shown by your client depend on the server version and your account permissions. Write tools that use confirmation preview the proposed change by default. Starting and confirming an artwork upload write on the first call.</p>
 
-<p>Read-only tools are marked <code>readOnlyHint</code> in the protocol, so a compliant client can run them
-without prompting. Write tools are marked <code>readOnlyHint: false</code>; the seventeen that change,
-remove or publish something (campaign edits, status and deletion, new campaigns, store settings
-and domains, order designs, a fulfillment order, a blog post) are also marked <code>destructiveHint</code>, so a compliant client
-prompts before applying them. The server does not enforce a separate human confirmation round
-trip; a client configured for automatic approval can send confirmation on its first call.</p>
+<p>Read-only tools advertise <code>readOnlyHint</code>. Write tools advertise <code>readOnlyHint: false</code> and indicate destructive actions with <code>destructiveHint</code>. Review previews in your client before applying changes.</p>
 
 <p>Every tool is filtered server-side to the seller account authorised for the connection.
 References to “your” data below mean data filtered by the backend, not by the assistant.</p>
 
 <hr>
 
-<h2 id="sales-analytics-6-tools-all-read">Sales &amp; analytics — 6 tools, all read</h2>
+<h2 id="sales-analytics-6-tools-all-read">Sales &amp; analytics</h2>
 
 <div class="tablewrap">
 <table>
@@ -155,7 +149,7 @@ rows are combined in an anonymous <strong>“Other”</strong> bucket. Your figu
 other party’s store identity is not returned.</p>
 </blockquote>
 
-<h2 id="orders-9-tools-3-write">Orders — 9 tools, 3 write</h2>
+<h2 id="orders-9-tools-3-write">Orders</h2>
 
 <div class="tablewrap">
 <table>
@@ -177,7 +171,7 @@ other party’s store identity is not returned.</p>
 <p>The fulfillment-order preview resolves each line against the catalog and reports the variant,
 an indicative base cost, and every blocking error or warning before anything is created.</p>
 
-<h2 id="artwork-catalog-6-tools-2-write">Artwork &amp; catalog — 6 tools, 2 write</h2>
+<h2 id="artwork-catalog-6-tools-2-write">Artwork &amp; catalog</h2>
 
 <div class="tablewrap">
 <table>
@@ -193,7 +187,7 @@ an indicative base cost, and every blocking error or warning before anything is 
 </table>
 </div>
 
-<h2 id="campaigns-16-tools-13-write">Campaigns — 16 tools, 13 write</h2>
+<h2 id="campaigns-16-tools-13-write">Campaigns</h2>
 
 <div class="tablewrap">
 <table>
@@ -209,6 +203,7 @@ an indicative base cost, and every blocking error or warning before anything is 
 <tr class="w"><td><strong>Create regular campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 campaigns per call, print designs placed on products the way the dashboard editor places them</td></tr>
 <tr class="w"><td><strong>Create an express template</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> The product set (templates, prices, colors) that express campaigns sell</td></tr>
 <tr class="w"><td><strong>Create express campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 campaigns per call from one express template, one design each</td></tr>
+<tr class="w"><td><strong>Create Layerkit campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Create campaigns from your Layerkit templates for buyer personalization.</td></tr>
 <tr class="w"><td><strong>Edit campaigns</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 per call: title, description, slug, collections, stores, end time and countdown, tracking pixels, marketplace listing and default product, as on the dashboard’s campaign edit page</td></tr>
 <tr class="w"><td><strong>Edit campaign products</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 campaigns per call: price within the template’s range, compare-at price, colors, default color and options, as on the dashboard’s pricing tab</td></tr>
 <tr class="w"><td><strong>Change campaign designs</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Up to 20 campaigns per call: new or removed designs and mockups, and products that need artwork, where the dashboard allows it. A launched regular campaign is sent back to draft first, as the dashboard’s “Edit design” does</td></tr>
@@ -225,7 +220,19 @@ created or changed, and anything refused because it does not belong to you or fa
 confirmation, so a confirmed call cannot create something different from what was previewed.
 Only <strong>Delete campaigns</strong> removes a campaign, and only a draft or inactive one with no orders.</p>
 
-<h2 id="customers-1-tool-read">Customers — 1 tool, read</h2>
+<h2 id="collections">Collections</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Tool</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td>Search collections</td><td>Find your collections or read their campaigns, SEO and banners.</td></tr>
+<tr class="w"><td><strong>Manage collections</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Create, edit or remove a collection you own.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="customers-1-tool-read">Customers</h2>
 
 <div class="tablewrap">
 <table>
@@ -241,7 +248,7 @@ phone, country, city, state, store, and the number and value of orders placed <s
 Buyer credentials, payment-processor IDs and platform-wide totals are never returned. See
 <a href="data-and-security">Data &amp; security</a>.</p>
 
-<h2 id="stores-team-7-tools-3-write">Stores &amp; team — 7 tools, 3 write</h2>
+<h2 id="stores-team-7-tools-3-write">Stores &amp; team</h2>
 
 <div class="tablewrap">
 <table>
@@ -254,13 +261,16 @@ Buyer credentials, payment-processor IDs and platform-wide totals are never retu
 <tr class="w"><td><strong>Create a store</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Opens a new storefront on a SenPrints sub-domain</td></tr>
 <tr class="w"><td><strong>Update a store</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Tracking ids (Facebook, TikTok, Google, Pinterest, Snapchat, Bing, Reddit, Quora, Klaviyo), default currency, theme, logo and featured collection. The preview shows each field before and after</td></tr>
 <tr class="w"><td><strong>Add a custom domain to a store</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Attaches a domain you own and returns the DNS record to add; at most 5 per account per 24 hours</td></tr>
+<tr><td>Get store UI widgets</td><td>Read the banners, collection grids and other widgets on a store’s pages.</td></tr>
+<tr class="w"><td><strong>Set store UI widgets</strong> <span class="pill write">Write</span></td><td><strong>Writes.</strong> Replace the widget list of a store page. Widgets omitted from the list are removed.</td></tr>
+<tr><td>List payment gateways</td><td>Read the account’s existing Stripe and PayPal gateway configuration and the stores that use it. Gateway secrets are excluded.</td></tr>
 </tbody>
 </table>
 </div>
 
-<p>Marketplace connection tokens are never included, and webhook URLs are removed.</p>
+<p>Marketplace connection tokens are never included, and webhook URLs are removed. On server versions that expose payment gateway settings, eligible sellers can assign an existing Stripe or PayPal gateway to a store’s checkout. The connector does not return gateway secrets or initiate a checkout payment.</p>
 
-<h2 id="money-5-tools-all-read">Money — 5 tools, all read</h2>
+<h2 id="money-5-tools-all-read">Money</h2>
 
 <div class="tablewrap">
 <table>
@@ -278,11 +288,9 @@ Buyer credentials, payment-processor IDs and platform-wide totals are never retu
 <p>Amounts are in USD, the platform settlement currency. Gateway response traces, payout
 signatures and raw topup payloads are removed before a response is returned.</p>
 
-<p>No tool requests a payout, transfers money or changes a payment method. The only charge a tool
-can cause is the extra print cost of a multi-print-space product when you approve an order’s
-designs, deducted from your SenPrints balance as it is on the dashboard.</p>
+<p>The connector can read balances and payouts. Payout requests, transfers and payment for fulfillment orders are handled outside the connector. Approving an order’s designs can charge extra print costs to your SenPrints balance.</p>
 
-<h2 id="blog-seo-4-tools-1-writes">Blog &amp; SEO — 4 tools, 1 writes</h2>
+<h2 id="blog-seo-4-tools-1-writes">Blog &amp; SEO</h2>
 
 <div class="tablewrap">
 <table>
@@ -301,7 +309,7 @@ update a post, the resolved URL slug, target store, published state and body siz
 it retains the existing slug unless you provide a new one. All HTML is sanitised when saved,
 so scripts and event handlers are removed from submitted content.</p>
 
-<h2 id="help-center-2-tools-all-read">Help center — 2 tools, all read</h2>
+<h2 id="help-center-2-tools-all-read">Help center</h2>
 
 <div class="tablewrap">
 <table>
@@ -313,7 +321,7 @@ so scripts and event handlers are removed from submitted content.</p>
 </table>
 </div>
 
-<h2 id="account-1-tool-read">Account — 1 tool, read</h2>
+<h2 id="account-1-tool-read">Account</h2>
 
 <div class="tablewrap">
 <table>

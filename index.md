@@ -1,7 +1,9 @@
 # SenPrints Seller Connector
 
-Use your AI assistant to ask questions about your SenPrints store in plain English. The
-connector answers with data from your SenPrints seller account.
+SenPrints prints and ships your print-on-demand orders. If you already use SenPrints, connect your seller account to review weekly sales, track an order or create a campaign from your designs in your AI assistant.
+
+- **New to SenPrints?** [Create a seller account](https://seller.senprints.com/auth/register) or [see how fulfillment works](https://blog.senprints.com/docs/tong-quan-ve-cac-tinh-nang-trong-muc-fulfill-order).
+- **Already a seller?** [Connect your AI assistant](/connect).
 
 > "How did last week compare to the week before?"
 > "Which country is growing fastest for me?"
@@ -13,12 +15,7 @@ your sales, orders, customers, campaigns, stores, payouts and billing. When you 
 can also create, edit and delete campaigns, create and update stores, place fulfillment orders,
 handle order designs and publish blog posts.
 
-**Of the 57 tools, 35 are read-only. The 22 write tools return a preview by default and apply
-a change only when confirmation is set. They are marked `readOnlyHint: false`, and the ones
-that change something already there are also marked `destructiveHint`, so a compliant client
-prompts before applying them. The server does not require a separate human round trip: a
-client configured for automatic approval can submit confirmation on its first call.**
-See [Data & security](/data-and-security).
+Write tools that use confirmation preview the proposed change by default. Starting and confirming an artwork upload write on the first call. A client configured for automatic approval can supply confirmation on its first call. See [Data & security](/data-and-security).
 
 ---
 
@@ -28,7 +25,7 @@ See [Data & security](/data-and-security).
 |---|---|
 | [Connect in 3 steps](/connect) | Link your account to Claude, ChatGPT or Cursor |
 | [What you can ask](/what-you-can-ask) | Example questions that work well |
-| [Tool reference](/tool-reference) | All 57 tools, what each one reads or writes |
+| [Tool reference](/tool-reference) | What each tool reads or writes |
 | [Data & security](/data-and-security) | What the assistant can see, and what it cannot |
 | [Privacy](/privacy) | What leaves SenPrints, where it goes, how long we keep it |
 | [Support](/support) | When something does not work |
@@ -48,13 +45,8 @@ connection cannot access another seller's data.
 ## What it is not
 
 - **Not an admin tool.** It cannot see other sellers, platform totals, or anything staff-only.
-- **Not unattended.** Every write previews by default and applies only when confirmation is
-  set; automatic client approval can provide confirmation on the first call. No tool deletes an
-  order, customer or store; only draft or inactive campaigns with no orders can be deleted.
-- **Not a payments tool.** It can tell you what your balance and payouts look like. It cannot
-  request a payout, transfer money, or change a payment method. The only charge a tool can
-  cause is the extra print cost when you approve an order's designs, taken from your SenPrints
-  balance as on the dashboard.
+- **Write controls.** Review previews before applying changes. No tool deletes an order, customer or store.
+- **Payments.** The connector can read balances and payouts. Approving an order’s designs can charge extra print costs to your SenPrints balance. On server versions that expose payment gateway settings, eligible sellers can assign an existing Stripe or PayPal gateway to a store’s checkout. The connector does not return gateway secrets or initiate a checkout payment.
 
 ## Requirements
 
